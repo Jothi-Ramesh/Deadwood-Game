@@ -1,30 +1,17 @@
 import java.util.Scanner;
+import org.w3c.dom.*;
+import javax.xml.parsers.*;
+import java.io.*;
 
 public class Gsystem extends LocationManager {
 
 
     // Field for keeping track of the current day in the Game
     private int currentDay;
-    int endDay =0;
-    private String[] playerLocationList;
     private static boolean gameEnded = false;
 
     // Create a System object corresponding to the amount of players in the game
     public Gsystem(int players) {
-        int startCred = 0;
-        int startRank =1;
-        if(players <4 && players > 1){
-            endDay = 3;
-        }
-        else if(players == 5){
-            startCred = 2;
-        }
-        else if(players == 6){
-            startCred = 4;
-        }
-        else if(players > 5){
-            startRank = 2;
-        }
         Scanner reader = new Scanner(System.in);
         Player[] Gplayers = new Player[];
         for(int i = 0; i<players; i++) {
@@ -297,7 +284,8 @@ public class Gsystem extends LocationManager {
 	    		System.out.println("Player " + playerTurn + " it is your turn.\nPlease select move \'m\' or work \'w\' or act \'a\' or rehease \'r\'");
 		    	playerSelection = scan.next().charAt(0);
 	    	}
-	    	
+	    	// code for successful selections
+	    	if(playerSelection = )
     	
 	    	turnCounter++;
     	}
