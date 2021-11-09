@@ -11,19 +11,67 @@ public class Gsystem extends LocationManager {
     private static boolean gameEnded = false;
 
     // Create a System object corresponding to the amount of players in the game
-    public Gsystem(int players) {
+    public Gsystem(int players) throws ParserConfigurationException {
         Scanner reader = new Scanner(System.in);
-        Player[] Gplayers = new Player[];
+        Player[] Gplayers = new Player[players];
         for(int i = 0; i<players; i++) {
             System.out.println("What is this players name?");
             String name = reader.nextLine();
-            Gplayers[i] = new Player(0, startCred, name, i, startRank);
+            Gplayers[i] = new Player(0, 0, name, i, 1);
         }
         reader.close();
         //time to build board
-        String BOARDFILE = "board.xml";
+        Document boardDoc = getDocFromFile("Deadwood-Game/board.xml");
+        boardDoc.getDocumentElement().normalize();
+        NodeList list = boardDoc.getElementsByTagName("set");
+        Scene[] scenes = new Scene[12];
+        for (int j = 0; j < list.getLength(); j++) {
+            Node curScene = list.item(j);
+            if (curScene.getNodeType() == Node.ELEMENT_NODE) {
+                Element scene = (Element) curScene;
+
+                String name = scene.getAttribute("name");
+                NodeList neighborsList = ((Element) curScene).getElementsByTagName("neighbor");
+                String[] neighbors = new String[neighborsList.getLength()];
+                for (int o = 0; o < neighborsList.getLength(); o++) {
+                    Node neighbor = neighborsList.item(o);
+                    Element neighborE = (Element) neighbor;
+                    neighbors[o] = neighborE.getAttribute("name");
+                }
+                NodeList takeList = ((Element) curScene).getElementsByTagName("take");
+                int takes = Integer.parseInt(((Element) takeList.item(0)).getAttribute("number"));
+                NodeList partList = ((Element) curScene).getElementsByTagName("parts");
+                int numParts = partList.getLength();
+                Part[] parts = new Part[numParts];
+                for(int k = 0; k < partList.getLength();k++){
+                    Node partN = partList.item(k);
+                    Element partE = (Element) partN;
+                    String pName = partE.getAttribute("name");
+                    int pLevel = Integer.parseInt(partE.getAttribute("level"));
+                    String pLine = partE.getElementsByTagName("line").item(0).getTextContent();
+                    parts[k] = new Part(pName, pLine, pLevel);
+                }
+                scenes[j] = new Scene(name, numParts, takes, neighbors, parts);
+            }
+        }
+        String[] oNeighbors = {"Train station", "Ranch", "Secret Hideout"};
+        String[] tNeighbors = {"Main Street", "Saloon", "Hideout"};
+        scenes[10] = new Scene("trailer", 0, 0, tNeighbors, null);
+        scenes[11] = new Scene("office", 0, 0, oNeighbors, null);
+
     }
-    public Gsystem() {
+    public Document getDocFromFile(String filename)
+            throws ParserConfigurationException {
+        DocumentBuilderFactory docBuildFac = DocumentBuilderFactory.newInstance();
+        DocumentBuilder docBuild = docBuildFac.newDocumentBuilder();
+        Document doc = null;
+        try {
+            doc = docBuild.parse(filename);
+        } catch (Exception ex) {
+            System.out.println("XML parse failure");
+            ex.printStackTrace();
+        }
+        return doc;
     }
 
     // Upates in-game day (and ends gane )
@@ -285,7 +333,7 @@ public class Gsystem extends LocationManager {
 		    	playerSelection = scan.next().charAt(0);
 	    	}
 	    	// code for successful selections
-	    	if(playerSelection = )
+	    	//if(playerSelection = )
     	
 	    	turnCounter++;
     	}
