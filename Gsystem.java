@@ -7,6 +7,7 @@ public class Gsystem extends LocationManager {
     private int currentDay;
     int endDay =0;
     private String[] playerLocationList;
+    private static boolean gameEnded = false;
 
     // Create a System object corresponding to the amount of players in the game
     public Gsystem(int players) {
@@ -51,6 +52,7 @@ public class Gsystem extends LocationManager {
     // Ends the game
     private void endGame() {
         // Needs implementation for determining winner of game
+    	gameEnded = true;
         System.exit(0);
     }
     // Checks for funds of a player to see if there is sufficient criterion for a upgrade
@@ -199,25 +201,36 @@ public class Gsystem extends LocationManager {
     		System.out.print("Please enter how many people will be playing: ");
         	people = scan.nextInt();
     	}
+    	
+    	// Create a LocationManager corresponding to the amount of players
+    	LocationManager theLocationManager = new LocationManager(people);
     	// Choose the correct game format based on playercount
     	if(people == 2) {
     		Player pOne = new Player(0, 0, "name", 1, 1);
     		Player pTwo = new Player(0, 0, "name", 2, 1);
+    		Player[] values = {pOne, pTwo};
+    		theLocationManager.listOfPlayers = values;
     	} else if(people == 3) {
     		Player pOne = new Player(0, 0, "name", 1, 1);
     		Player pTwo = new Player(0, 0, "name", 2, 1);
     		Player pThree = new Player(0, 0, "name", 3, 1);
+    		Player[] values = {pOne, pTwo, pThree};
+    		theLocationManager.listOfPlayers = values;
     	} else if(people == 4) {
     		Player pOne = new Player(0, 0, "name", 1, 1);
     		Player pTwo = new Player(0, 0, "name", 2, 1);
     		Player pThree = new Player(0, 0, "name", 3, 1);
     		Player pFour = new Player(0, 0, "name", 4, 1);
+    		Player[] values = {pOne, pTwo, pThree, pFour};
+    		theLocationManager.listOfPlayers = values;
     	} else if(people == 5) {
     		Player pOne = new Player(0, 2, "name", 1, 1);
     		Player pTwo = new Player(0, 2, "name", 2, 1);
     		Player pThree = new Player(0, 2, "name", 3, 1);
     		Player pFour = new Player(0, 2, "name", 4, 1);
-    		Player pFive = new Player(0, 2, "name", 5, 1);    		
+    		Player pFive = new Player(0, 2, "name", 5, 1);
+    		Player[] values = {pOne, pTwo, pThree, pFour, pFive};
+    		theLocationManager.listOfPlayers = values;
     	} else if(people == 6 ) {
     		Player pOne = new Player(0, 4, "name", 1, 1);
     		Player pTwo = new Player(0, 4, "name", 2, 1);
@@ -225,7 +238,8 @@ public class Gsystem extends LocationManager {
     		Player pFour = new Player(0, 4, "name", 4, 1);
     		Player pFive = new Player(0, 4, "name", 5, 1);
     		Player pSix = new Player(0, 4, "name", 6, 1);
-    		
+    		Player[] values = {pOne, pTwo, pThree, pFour, pFive, pSix};
+    		theLocationManager.listOfPlayers = values;    		
     	} else if(people == 7) {
     		Player pOne = new Player(0, 0, "name", 1, 2);
     		Player pTwo = new Player(0, 0, "name", 2, 2);
@@ -234,6 +248,8 @@ public class Gsystem extends LocationManager {
     		Player pFive = new Player(0, 0, "name", 5, 2);
     		Player pSix = new Player(0, 0, "name", 6, 2);
     		Player pSeven = new Player(0, 0, "name", 7, 2);
+    		Player[] values = {pOne, pTwo, pThree, pFour, pFive, pSix, pSeven};
+    		theLocationManager.listOfPlayers = values;
     	} else {
     		Player pOne = new Player(0, 0, "name", 1, 2);
     		Player pTwo = new Player(0, 0, "name", 2, 2);
@@ -243,7 +259,50 @@ public class Gsystem extends LocationManager {
     		Player pSix = new Player(0, 0, "name", 6, 2);
     		Player pSeven = new Player(0, 0, "name", 7, 2);
     		Player pEight = new Player(0, 0, "name", 8, 2);
+    		Player[] values = {pOne, pTwo, pThree, pFour, pFive, pSix, pSeven, pEight};
+    		theLocationManager.listOfPlayers = values;
     	}
+    	// moveAllPlayersToTrailers();
+    	
+    	// create a variable to keep track of the total turns, we will also use this as a mechanism to determine whos turn it is by using modular arithmetic!
+    	int turnCounter = 0;
+    	while(!gameEnded) {  		
+	    	int playerTurn = turnCounter % people + 1;
+	    	System.out.println("Player " + playerTurn + " it is your turn.\nPlease select move \'m\' or work \'w\' or act \'a\' or rehease \'r\'");
+	    	char playerSelection = scan.next().charAt(0);
+	    	// prompt again if player selection is not valid
+	    	while(!(playerSelection == 'm' || playerSelection == 'w' || playerSelection == 'a' || playerSelection == 'r')) {
+	    		System.out.println("Invalid selection, please choose again!");
+	    		System.out.println("Player " + playerTurn + " it is your turn.\nPlease select move \'m\' or work \'w\' or act \'a\' or rehease \'r\'");
+		    	playerSelection = scan.next().charAt(0);
+	    	}
+	    	// the current player object can be referenced by theLocationManager.listOfPlayers[playerTurn - 1]	    
+	    	while(playerSelection == 'm' && !theLocationManager.listOfPlayers[playerTurn - 1].role.equals("no")) {
+	    		System.out.println("You cannot move while you currently have a role.");
+	    		System.out.println("Player " + playerTurn + " it is your turn.\nPlease select move \'m\' or work \'w\' or act \'a\' or rehease \'r\'");
+		    	playerSelection = scan.next().charAt(0);
+	    	}
+	    	while(playerSelection == 'w' && !theLocationManager.listOfPlayers[playerTurn - 1].role.equals("no")) {
+	    		System.out.println("You cannot work while you already have a role!");
+	    		System.out.println("Player " + playerTurn + " it is your turn.\nPlease select move \'m\' or work \'w\' or act \'a\' or rehease \'r\'");
+		    	playerSelection = scan.next().charAt(0);
+	    	}
+	    	while(playerSelection == 'a' && theLocationManager.listOfPlayers[playerTurn - 1].role.equals("no")) {
+	    		System.out.println("You need to have a role in order to act");
+	    		System.out.println("Player " + playerTurn + " it is your turn.\nPlease select move \'m\' or work \'w\' or act \'a\' or rehease \'r\'");
+		    	playerSelection = scan.next().charAt(0);
+	    	}
+	    	while(playerSelection == 'r' && theLocationManager.listOfPlayers[playerTurn - 1].role.equals("no")) {
+	    		System.out.println("You need to have a role in order to rehearse");
+	    		System.out.println("Player " + playerTurn + " it is your turn.\nPlease select move \'m\' or work \'w\' or act \'a\' or rehease \'r\'");
+		    	playerSelection = scan.next().charAt(0);
+	    	}
+	    	
+    	
+	    	turnCounter++;
+    	}
+    	
+    	
     	
     	
     }

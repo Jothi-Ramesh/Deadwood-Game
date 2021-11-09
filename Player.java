@@ -1,7 +1,7 @@
 public class Player {
     int num;
     String name;
-    String role;
+    public String role = "no";
     String location;
     String scene;
     int credits;

@@ -1,12 +1,14 @@
 public class LocationManager {
 
     protected int playerCount;
-    private String[] playerLocationList;
+    protected String[] playerLocationList;
+    protected Player[] listOfPlayers;
 
     // Create a LocationManager object corresponding to the amount of players
     public LocationManager(int players) {
         playerCount = players;
-        String[] playerLocationList = new String[players];
+        listOfPlayers = new Player[players];
+        playerLocationList = new String[players];  
     }
 
     public LocationManager() {
