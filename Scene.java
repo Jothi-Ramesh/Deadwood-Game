@@ -3,8 +3,17 @@ public class Scene {
     int numRoles;
     int[][] filledRoles;
     String location;
-    int shots;
-    public Scene(String name, int numRoles, int shots){}
+    String[] neighbors;
+    Part[] parts;
+    int takes;
+    public Scene(String nameIn, int numRolesIn, int takesIn, String neighborsIn[], Part[] partsIn){
+        name = nameIn;
+        numRoles = numRolesIn;
+        takes = takesIn;
+        neighbors = neighborsIn;
+        parts = partsIn;
+
+    }
     public int[][] getFilledRoles() {
         return filledRoles;
     }
@@ -17,8 +26,8 @@ public class Scene {
         return numRoles;
     }
 
-    public int getShots() {
-        return shots;
+    public int getTakes() {
+        return takes;
     }
 
     public String getLocation() {
@@ -27,5 +36,7 @@ public class Scene {
     public void fillRole(){}
     public void decreaseShot(){}
 
-
+    public String[] getNeighbors() {
+        return neighbors;
+    }
 }
