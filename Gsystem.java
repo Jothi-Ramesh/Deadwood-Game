@@ -199,5 +199,52 @@ public class Gsystem extends LocationManager {
     		System.out.print("Please enter how many people will be playing: ");
         	people = scan.nextInt();
     	}
+    	// Choose the correct game format based on playercount
+    	if(people == 2) {
+    		Player pOne = new Player(0, 0, "name", 1, 1);
+    		Player pTwo = new Player(0, 0, "name", 2, 1);
+    	} else if(people == 3) {
+    		Player pOne = new Player(0, 0, "name", 1, 1);
+    		Player pTwo = new Player(0, 0, "name", 2, 1);
+    		Player pThree = new Player(0, 0, "name", 3, 1);
+    	} else if(people == 4) {
+    		Player pOne = new Player(0, 0, "name", 1, 1);
+    		Player pTwo = new Player(0, 0, "name", 2, 1);
+    		Player pThree = new Player(0, 0, "name", 3, 1);
+    		Player pFour = new Player(0, 0, "name", 4, 1);
+    	} else if(people == 5) {
+    		Player pOne = new Player(0, 2, "name", 1, 1);
+    		Player pTwo = new Player(0, 2, "name", 2, 1);
+    		Player pThree = new Player(0, 2, "name", 3, 1);
+    		Player pFour = new Player(0, 2, "name", 4, 1);
+    		Player pFive = new Player(0, 2, "name", 5, 1);    		
+    	} else if(people == 6 ) {
+    		Player pOne = new Player(0, 4, "name", 1, 1);
+    		Player pTwo = new Player(0, 4, "name", 2, 1);
+    		Player pThree = new Player(0, 4, "name", 3, 1);
+    		Player pFour = new Player(0, 4, "name", 4, 1);
+    		Player pFive = new Player(0, 4, "name", 5, 1);
+    		Player pSix = new Player(0, 4, "name", 6, 1);
+    		
+    	} else if(people == 7) {
+    		Player pOne = new Player(0, 0, "name", 1, 2);
+    		Player pTwo = new Player(0, 0, "name", 2, 2);
+    		Player pThree = new Player(0, 0, "name", 3, 2);
+    		Player pFour = new Player(0, 0, "name", 4, 2);
+    		Player pFive = new Player(0, 0, "name", 5, 2);
+    		Player pSix = new Player(0, 0, "name", 6, 2);
+    		Player pSeven = new Player(0, 0, "name", 7, 2);
+    	} else {
+    		Player pOne = new Player(0, 0, "name", 1, 2);
+    		Player pTwo = new Player(0, 0, "name", 2, 2);
+    		Player pThree = new Player(0, 0, "name", 3, 2);
+    		Player pFour = new Player(0, 0, "name", 4, 2);
+    		Player pFive = new Player(0, 0, "name", 5, 2);
+    		Player pSix = new Player(0, 0, "name", 6, 2);
+    		Player pSeven = new Player(0, 0, "name", 7, 2);
+    		Player pEight = new Player(0, 0, "name", 8, 2);
+    	}
+    	
+    	
     }
 }
