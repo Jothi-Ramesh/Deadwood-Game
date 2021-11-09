@@ -1,13 +1,13 @@
 public class Player {
-    int num;
-    String name;
-    String role;
+    public int num;
+    public String name;
+    public String role = "no";
     String location;
     String scene;
-    int credits;
-    int rank;
-    int money;
-    int rehearseLvl;
+    private int credits;
+    private int rank;
+    private int money;
+    private int rehearseLvl;
 
 
     Player(int startMon, int startCred, String name, int num, int rank){}
@@ -43,9 +43,9 @@ public class Player {
 
 
     public void work(String Role, String location, String scene){}
-    private void move(String location){
+    public void move(String location){
 
     }
     public void rehearse(String scene, int rehearseLvl){}
-    private void upgrade(int rank, int credits, int money, String location){}
+    public void upgrade(int rank, int credits, int money, String location){}
 }
