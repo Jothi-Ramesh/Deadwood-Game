@@ -14,6 +14,10 @@ public class Scene {
         takes = takesIn;
         neighbors = neighborsIn;
         parts = partsIn;
+        filledRoles = new int [numRoles];
+        for (int i = 0; i < numRoles; i ++){
+            filledRoles[i] = 0;
+        }
 
     }
     public int[] getFilledRoles() {
