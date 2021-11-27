@@ -3,6 +3,7 @@ import java.util.Scanner;
 import org.w3c.dom.*;
 import javax.xml.parsers.*;
 import java.io.*;
+import javax.swing.*;
 
 public class Gsystem extends LocationManager {
 
@@ -51,7 +52,7 @@ public class Gsystem extends LocationManager {
             }
         }
         String[] oNeighbors = {"Train station", "Ranch", "Secret Hideout"};
-        String[] tNeighbors = {"Main Street", "Saloon", "Hideout"};
+        String[] tNeighbors = {"Main Street", "Saloon", "Secret Hideout"};
         scenes[10] = new Scene("trailer", 0, 0, tNeighbors, null);
         scenes[11] = new Scene("office", 0, 0, oNeighbors, null);
 
@@ -82,23 +83,27 @@ public class Gsystem extends LocationManager {
                     String pLine = partE.getElementsByTagName("line").item(0).getTextContent();
                     parts[k] = new Part(pName, pLine, pLevel);
                 }
-                cards[i] = new Card(cardName, line, cardNum, cardBudget, numParts);
+                cards[i] = new Card(cardName, line, cardNum, cardBudget, numParts, parts);
             }
 
         }
         cardsArr = cards;
+<<<<<<< HEAD
         setCards(cards, scenes);
+=======
+>>>>>>> 5e1e192cd1d800de1dc6fe9fe34f80806756cf6d
         scenesArr = scenes;
+        setCards();
 
     }
 
     public void setCards(Card[] cardsArr, Scene[] scenes) {
         int range = cardsArr.length;
         Random rn = new Random();
-        int n = range+1;
-        int r = rn.nextInt()%n;
-        for(int j = 0; j < scenes.length; j++){
-            scenes[j].addCard(cardsArr[r]);
+        int n = rn.nextInt(40);
+        for(int j = 0; j < scenesArr.length; j++){
+            n = rn.nextInt(40);
+            scenesArr[j].addCard(cardsArr[n]);
         }
     }
     public Document getDocFromFile(String filename)
@@ -355,21 +360,21 @@ public class Gsystem extends LocationManager {
     	
     	// create a variable to keep track of the total turns, we will also use this as a mechanism to determine whos turn it is by using modular arithmetic!
     	int turnCounter = 0;
-
+    	String name = scan.nextLine();
         for(int i = 0; i<people; i++) {
             System.out.println("What is this players name?");
-            String name = scan.nextLine();
+            name = scan.nextLine();
             Gplayers[i].name = name;
         }
     	Gsystem gsys = new Gsystem(people);
-        LocationManager manager = new LocationManager(people, gsys.scenesArr);
+        LocationManager manager = new LocationManager(people, gsys.scenesArr, Gplayers);
         manager.listOfPlayers = Gplayers;
         manager.playerLocationList=gsys.scenesArr;
 
     	while(!gameEnded) {  		
-	    	int playerTurn = turnCounter % people + 1;
+	    	int playerTurn = (turnCounter%people)+1;
 	    	char playerSelection = 0;
-	    	Player curPlayer = Gplayers[playerTurn];
+	    	Player curPlayer = Gplayers[playerTurn-1];
 	    	if(curPlayer.location == "trailer" || curPlayer.location == "office" || gsys.scenesArr[manager.getInd(curPlayer.location)].numRoles==0){
 	    	    if(curPlayer.location== "office"){
                     System.out.println("Player " + playerTurn + " it is your turn.\nPlease select move \'m\' or upgrade \'u\'");
@@ -474,36 +479,37 @@ public class Gsystem extends LocationManager {
                     }
                 }
                 System.out.println("\n pick a number to make the corisponding selection.");
-                int moveInt = scan.nextInt();
-                manager.movePlayer(curPlayer, neighbors[moveInt-1]);
+                int moveInt = Integer.parseInt(scan.nextLine());
+                manager.movePlayer(curPlayer, neighbors[moveInt]);
                 System.out.println("Pick a role? y/n");
                 String confirm = scan.nextLine();
-                if(confirm == "y"){
+                if(confirm.equals("y")){
                     System.out.println("Pick a role to fill:");
-                    int locind = manager.getInd(location);
+                    int locind = manager.getInd(curPlayer.location);
                     Scene curScene = gsys.scenesArr[locind];
                     Card curCard = curScene.curCard;
                     int numPartCard = curCard.numParts;
                     int numPartScene = curScene.numRoles;
                     int numParts = curScene.numRoles + curCard.numParts;
                     int ind =0;
-                    System.out.print("Roles on the board: ");
+                    System.out.print("Roles available on the board: ");
                     int i;
                     int k;
                     for(i = 0; i<numPartScene; i++){
-                        if(!curScene.parts[i].taken) {
+                        if(!curScene.parts[i].taken  && curScene.parts[i].level <= curPlayer.getRank()) {
                             System.out.print(ind + ".  " + curScene.parts[i].name + "  ");
                             ind++;
                         }
                     }
-                    System.out.print("\nRoles on the card: ");
-                    for(k = ind; k <numParts; k++){
-                        if(!curCard.parts[k].taken) {
+                    System.out.print("\nRoles available on the card: ");
+                    for(k = 0; k <numPartCard; k++){
+                        if(!curCard.parts[k].taken && curCard.parts[k].level <= curPlayer.getRank()) {
                             System.out.print(ind + ".  " + curCard.parts[k].name + "  ");
                             ind++;
                         }
                     }
-                    int roleInt = scan.nextInt();
+                    System.out.println("Please make selection by entering number next to part\n");
+                    int roleInt = Integer.parseInt(scan.nextLine());
                     int permInt = roleInt;
                     if(roleInt >i){
                         roleInt -= numPartScene;

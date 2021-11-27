@@ -4,10 +4,10 @@ public class Part{
     int level;
     boolean taken;
 
-    public Part(String name, String line, int level){
-        name = name;
-        line = line;
-        level = level;
+    public Part(String nName, String nLine, int nLevel){
+        name = nName;
+        line = nLine;
+        level = nLevel;
         taken = false;
     }
     public String getName() {

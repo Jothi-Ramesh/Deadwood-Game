@@ -6,13 +6,16 @@ public class Card {
     int numParts;
     Part[] parts;
 
-    public Card(String nameN, String descN, int scnNumN, int budgetN, int numPartsN) {
+    public Card(String nameN, String descN, int scnNumN, int budgetN, int numPartsN, Part partsIn[]) {
         name = nameN;
         desc = descN;
         scnNum = scnNumN;
         budget = budgetN;
         numParts = numPartsN;
         parts = new Part[numParts];
+        for(int i = 0; i < numParts; i++){
+            parts[i] = partsIn[i];
+        }
     }
 
     public String getName() {

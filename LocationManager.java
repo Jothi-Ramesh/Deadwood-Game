@@ -6,10 +6,11 @@ public class LocationManager {
     protected Scene[] scenes;
 
     // Create a LocationManager object corresponding to the amount of players
-    public LocationManager(int players, Scene[] scenesDict) {
+    public LocationManager(int players, Scene[] scenesDict, Player[] playerList) {
         playerCount = players;
         listOfPlayers = new Player[players];
         scenes = scenesDict;
+        playerLocationList = new Scene[playerCount];
         for(int i =0; i < playerCount; i++){
             playerLocationList[i] = scenes[10];
         }
@@ -39,7 +40,7 @@ public class LocationManager {
 
     public int getInd(String location){
         for(int i = 0; i < scenes.length; i ++){
-            if(scenes[i].name == location){
+            if(scenes[i].name.equals(location)){
                 return i;
             }
         }
