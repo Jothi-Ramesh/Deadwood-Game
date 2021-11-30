@@ -110,7 +110,7 @@ public class BoardLayersListener extends JFrame {
     class boardMouseListener implements MouseListener {
 
         // Code for the different button clicks
-        public void mouseClicked(MouseEvent e) {
+        public void mouseClicked(MouseEvent e, Player p) {
 
             if (e.getSource() == bAct) {
                 playerlabel.setVisible(true);
@@ -119,6 +119,85 @@ public class BoardLayersListener extends JFrame {
                 System.out.println("Rehearse is Selected\n");
             } else if (e.getSource() == bMove) {
                 System.out.println("Move is Selected\n");
+                // initialize JFrame object for the list of move choices
+                JFrame moveChoices = new JFrame();
+                // get currentLocation of player
+                String curLocation = p.getLocation();
+                if(curLocation.equals("Train Station")) {
+                	JButton neighbor1 = new JButton("Jail");
+                	JButton neighbor2 = new JButton("General Store");
+                	JButton neighbor3 = new JButton("office");
+                } else if(curLocation.equals("Secret Hideout")) {
+                	JButton neighbor1 = new JButton("Church");
+                	JButton neighbor2 = new JButton("Ranch");
+                	JButton neighbor3 = new JButton("office");
+                } else if(curLocation.equals("Church")) {
+                	JButton neighbor1 = new JButton("Secret Hideout");
+                	JButton neighbor2 = new JButton("Bank");
+                	JButton neighbor3 = new JButton("Hotel");
+                } else if(curLocation.equals("Hotel")) {
+                	JButton neighbor1 = new JButton("trailer");
+                	JButton neighbor2 = new JButton("Bank");
+                	JButton neighbor3 = new JButton("Church");
+                } else if(curLocation.equals("Main Street")) {
+                	JButton neighbor1 = new JButton("trailer");
+                	JButton neighbor2 = new JButton("Jail");
+                	JButton neighbor3 = new JButton("Saloon");
+                } else if(curLocation.equals("Jail")) {
+                	JButton neighbor1 = new JButton("Main Street");
+                	JButton neighbor2 = new JButton("General Store");
+                	JButton neighbor3 = new JButton("Train Station");
+                } else if(curLocation.equals("General Store")) {
+                	JButton neighbor1 = new JButton("Ranch");
+                	JButton neighbor2 = new JButton("Train Station");
+                	JButton neighbor3 = new JButton("Jail");
+                	JButton neighbor4 = new JButton("Saloon");
+                } else if(curLocation.equals("Ranch")) {
+                	JButton neighbor1 = new JButton("office");
+                	JButton neighbor2 = new JButton("General Store");
+                	JButton neighbor3 = new JButton("Secret Hideout");
+                	JButton neighbor4 = new JButton("Bank")
+                } else if(curLocation.equals("Bank")) {
+                	JButton neighbor1 = new JButton("Saloon");
+                	JButton neighbor2 = new JButton("Church");
+                	JButton neighbor3 = new JButton("Ranch");
+                	JButton neighbor4 = new JButton("Hotel");
+                } else if(curLocation.equals("Saloon")) {
+                	JButton neighbor1 = new JButton("Main Street");
+                	JButton neighbor2 = new JButton("General Store");
+                	JButton neighbor3 = new JButton("Bank");
+                	JButton neighbor4 = new JButton("trailer");
+                } else if(curLocation.equals("trailer")) {
+                	JButton neighbor1 = new JButton("Main Street");
+                	JButton neighbor2 = new JButton("Saloon");
+                	JButton neighbor3 = new JButton("Hotel");
+                	// last else is for office (the place where you can upgrade)
+                } else {
+                	JButton neighbor1 = new JButton("Train Station");
+                	JButton neighbor2 = new JButton("Ranch");
+                	JButton neighbor3 = new JButton("Secret Hideout");
+                }
+                
+                
+                
+                JFrame moveChoices = new JFrame();
+                moveChoices.setSize(300,600);
+                moveChoices.setTitle("Move Choices");
+                
+                JButton but1 = new JButton("hi");
+                JButton but2 = new JButton("hola");
+                
+                int indScene = manager.getInd(location);
+	    	    String[] neighbors = gsys.scenesArr[indScene].neighbors;
+	    	    
+	    	    for(int j = 0; j < neighbors.length; j++){
+                    System.out.print(j+". "+neighbors[j]+"  ");
+                    if(gsys.scenesArr[manager.getInd(neighbors[j])].numRoles == 0){
+                        System.out.print("(no roles or wrapped)");
+                    }
+                }
+                moveChoices.setVisible(true);
+
             }
         }
 
@@ -142,7 +221,11 @@ public class BoardLayersListener extends JFrame {
         board.setVisible(true);
 
         // Take input from the user about number of players
-        int playerCount = Integer.parseInt(JOptionPane.showInputDialog(board, "How many players?"));
+        int playerCount = Integer.parseInt(JOptionPane.showInputDialog(board, "How many players? (2-8)"));
+        while(playerCount < 2 || playerCount > 8) {
+        	playerCount = Integer.parseInt(JOptionPane.showInputDialog(board, "invalid choice, please choose a valid amount! (2-8)"));
+    	}
+        
 
         Player[] Gplayers = new Player[playerCount];
         // Choose the correct game format based on playercount
