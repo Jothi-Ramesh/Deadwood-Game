@@ -16,7 +16,7 @@ import java.util.Random;
 import java.util.Scanner;
 import javax.swing.JOptionPane;
 import javax.xml.parsers.ParserConfigurationException;
-
+import java.util.*;
 public class BoardLayersListener extends JFrame {
 
     // JLabels
@@ -203,7 +203,8 @@ public class BoardLayersListener extends JFrame {
         for (int i = 0; i < playerCount; i++) {
             Gplayers[i].name = JOptionPane.showInputDialog(board, "What is this players name?");
         }
-
+        
+        Scanner scan = new Scanner(System.in);
         Gsystem gsys = new Gsystem(playerCount);
         LocationManager manager = new LocationManager(playerCount, gsys.scenesArr, Gplayers);
         manager.listOfPlayers = Gplayers;
