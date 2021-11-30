@@ -6,7 +6,7 @@ public class LocationManager {
     protected Scene[] scenes;
 
     // Create a LocationManager object corresponding to the amount of players
-    public LocationManager(int players, Scene[] scenesDict, Player playerList[]) {
+    public LocationManager(int players, Scene[] scenesDict, Player[] playerList) {
         playerCount = players;
         listOfPlayers = new Player[players];
         scenes = scenesDict;

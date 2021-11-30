@@ -88,12 +88,12 @@ public class Gsystem extends LocationManager {
 
         }
         cardsArr = cards;
+        setCards(cards, scenes);
         scenesArr = scenes;
-        setCards();
-
+        
     }
 
-    public void setCards() {
+    public void setCards(Card[] cardsArr, Scene[] scenesArr) {
         int range = cardsArr.length;
         Random rn = new Random();
         int n = rn.nextInt(40);

@@ -1,7 +1,7 @@
 public class Scene {
     String name;
     int numRoles;
-    int[] filledRoles;
+    int[] filledRoles = new int[0];
     String location;
     String[] neighbors;
     Part[] parts;
