@@ -300,31 +300,24 @@ public class BoardLayersListener extends JFrame {
                 if(manager.days==0){
                     //game over
                 }
-                if(curPlayer.equals("office")){
-                    enableButtons(3);
-                }
-                else if(!curPlayer.role.equals("no")){
-                    enableButtons(2);
-                }
-                else{
-                    enableButtons(1);
-                }
+                enableButtons();
 
             }
             if (e.getSource() == bAct) {
                 playerlabel.setVisible(true);
                 Scene curScene = manager.scenes[manager.getInd(curPlayer.location)];
-                int shotNum = curScene.takes;
+                int shotNum = curScene.takes-1;
                 int budget = curScene.curCard.budget;
+                int rank = curPlayer.getRank();
                 int roll = (int) (Math.random() * 6 + 1);
                 if (curPlayer.role.equals("card")) {
-                    if (roll >= budget) {
+                    if (roll+rank >= budget) {
                         curScene.takes--;
                         curPlayer.setCredits(curPlayer.getCredits()+2);
                     }
                 }
                 else{
-                    if (roll >= budget) {
+                    if (roll+rank >= budget) {
 
                         JLabel token = new JLabel();
                         ImageIcon tokIcon = new ImageIcon("Deadwood-game/shot.png");
@@ -645,17 +638,20 @@ public class BoardLayersListener extends JFrame {
         setPlayerInfo(curPlayer);
     }
 
-    private void enableButtons(int opts){
+    private void enableButtons(){
         bMove.setEnabled(true);
         bUpgrade.setEnabled(true);
         bAct.setEnabled(true);
         bRehearse.setEnabled(true);
-        if(opts == 1){
+        if(!curPlayer.location.equals("office")){
             bUpgrade.setEnabled(false);
         }
-        if (opts == 2){
+        if (curPlayer.role.equals("no")){
+            bAct.setEnabled(false);
+            bRehearse.setEnabled(false);
+        }
+        else{
             bMove.setEnabled(false);
-            bUpgrade.setEnabled(false);
         }
     }
 

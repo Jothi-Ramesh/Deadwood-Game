@@ -57,7 +57,10 @@ public class LocationManager {
     public void sceneWrap(Scene curScene){
 
         int onCard = 0;
-        Player[] playersInScene = new Player[curScene.numRoles];
+        Player[] playersInScene = new Player[curScene.filledRoles.length];
+        for(int n = 0; n<curScene.filledRoles.length; n++){
+            playersInScene[n] = null;
+        }
         int ind = 0;
         for(int i = 0; i <curScene.filledRoles.length; i++){
             if(curScene.filledRoles[i] != 0){
@@ -69,6 +72,13 @@ public class LocationManager {
             }
         }
         if(onCard == 1){
+            for(int j = 0; j < playersInScene.length; j++){
+                playersInScene[j].role="no";
+                playersInScene[j].part=null;
+                //add awarding here tomorrow
+            }
+        }
+        else{
             for(int j = 0; j < playersInScene.length; j++){
                 playersInScene[j].role="no";
                 playersInScene[j].part=null;
