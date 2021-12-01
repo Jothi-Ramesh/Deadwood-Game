@@ -246,7 +246,7 @@ public class BoardLayersListener extends JFrame {
 
         // Code for the different button clicks
         public void mouseClicked(MouseEvent e) {
-
+            boolean playerMoved = false;
             Player p = curPlayer;
             if(e.getSource() == bEndTurn){
                 turnCounter++;
@@ -259,6 +259,7 @@ public class BoardLayersListener extends JFrame {
             } else if(e.getSource() == bUpgrade){
 
             } else if (e.getSource() == bMove) {
+
                 System.out.println("Move is Selected\n");
                 // initialize JFrame object for the list of move choices
 
@@ -307,123 +308,86 @@ public class BoardLayersListener extends JFrame {
                     }
 
                 }
-                /*
-                if(curScene.name.equals("Train Station")) {
-                	bmJail.setOpaque(false);
-                	JButton neighbor2 = new JButton("General Store");
-                	JButton neighbor3 = new JButton("office");
-                } else if(curScene.name.equals("Secret Hideout")) {
-                	JButton neighbor1 = new JButton("Church");
-                	JButton neighbor2 = new JButton("Ranch");
-                	JButton neighbor3 = new JButton("office");
-                } else if(curScene.name.equals("Church")) {
-                	JButton neighbor1 = new JButton("Secret Hideout");
-                	JButton neighbor2 = new JButton("Bank");
-                	JButton neighbor3 = new JButton("Hotel");
-                } else if(curScene.name.equals("Hotel")) {
-                	JButton neighbor1 = new JButton("trailer");
-                	JButton neighbor2 = new JButton("Bank");
-                	JButton neighbor3 = new JButton("Church");
-                } else if(curScene.name.equals("Main Street")) {
-                	JButton neighbor1 = new JButton("trailer");
-                	JButton neighbor2 = new JButton("Jail");
-                	JButton neighbor3 = new JButton("Saloon");
-                } else if(curScene.name.equals("Jail")) {
-                	JButton neighbor1 = new JButton("Main Street");
-                	JButton neighbor2 = new JButton("General Store");
-                	JButton neighbor3 = new JButton("Train Station");
-                } else if(curScene.name.equals("General Store")) {
-                	JButton neighbor1 = new JButton("Ranch");
-                	JButton neighbor2 = new JButton("Train Station");
-                	JButton neighbor3 = new JButton("Jail");
-                	JButton neighbor4 = new JButton("Saloon");
-                } else if(curScene.name.equals("Ranch")) {
-                	JButton neighbor1 = new JButton("office");
-                	JButton neighbor2 = new JButton("General Store");
-                	JButton neighbor3 = new JButton("Secret Hideout");
-                	JButton neighbor4 = new JButton("Bank");
-                } else if(curScene.name.equals("Bank")) {
-                	JButton neighbor1 = new JButton("Saloon");
-                	JButton neighbor2 = new JButton("Church");
-                	JButton neighbor3 = new JButton("Ranch");
-                	JButton neighbor4 = new JButton("Hotel");
-                } else if(curScene.name.equals("Saloon")) {
-                	JButton neighbor1 = new JButton("Main Street");
-                	JButton neighbor2 = new JButton("General Store");
-                	JButton neighbor3 = new JButton("Bank");
-                	JButton neighbor4 = new JButton("trailer");
-                } else if(curScene.name.equals("trailer")) {
-                	JButton neighbor1 = new JButton("Main Street");
-                	JButton neighbor2 = new JButton("Saloon");
-                	JButton neighbor3 = new JButton("Hotel");
-                	// last else is for office (the place where you can upgrade)
-                } else {
-                	JButton neighbor1 = new JButton("Train Station");
-                	JButton neighbor2 = new JButton("Ranch");
-                	JButton neighbor3 = new JButton("Secret Hideout");
-                }
-
-
-
-
-                JFrame moveChoices = new JFrame();
-                moveChoices.setSize(300,600);
-                moveChoices.setTitle("Move Choices");
-
-                JButton but1 = new JButton("hi");
-                JButton but2 = new JButton("hola");
-
-                 */
-
 
             } else if (e.getSource() == bmTrainStation) {
                 manager.movePlayer(p, "Train Station");
                 hideButtons();
                 disableButtons();
+                playerMoved = true;
             } else if (e.getSource() == bmSecrectHideout) {
                 manager.movePlayer(p, "Secret Hideout");
                 hideButtons();
                 disableButtons();
+                playerMoved = true;
             } else if (e.getSource() == bmChurch) {
                 manager.movePlayer(p, "Church");
                 hideButtons();
                 disableButtons();
+                playerMoved = true;
             } else if (e.getSource() == bmHotel) {
                 manager.movePlayer(p, "Hotel");
                 hideButtons();
                 disableButtons();
+                playerMoved = true;
             } else if (e.getSource() == bmMainStreet) {
                 manager.movePlayer(p, "Main Street");
                 hideButtons();
                 disableButtons();
+                playerMoved = true;
             } else if (e.getSource() == bmJail) {
                 manager.movePlayer(p, "Jail");
                 hideButtons();
                 disableButtons();
+                playerMoved = true;
             } else if (e.getSource() == bmGeneralStore) {
                 manager.movePlayer(p, "General Store");
                 hideButtons();
                 disableButtons();
+                playerMoved = true;
             } else if (e.getSource() == bmRanch) {
                 manager.movePlayer(p, "Ranch");
                 hideButtons();
                 disableButtons();
+                playerMoved = true;
             } else if (e.getSource() == bmBank) {
                 manager.movePlayer(p, "Bank");
                 hideButtons();
                 disableButtons();
+                playerMoved = true;
             } else if (e.getSource() == bmSaloon) {
                 manager.movePlayer(p, "Saloon");
                 hideButtons();
                 disableButtons();
+                playerMoved = true;
             } else if (e.getSource() == bmTrailer) {
                 manager.movePlayer(p, "trailer");
                 hideButtons();
                 disableButtons();
+                playerMoved = true;
             } else if (e.getSource() == bmOffice) {
                 manager.movePlayer(p, "Office");
                 hideButtons();
                 disableButtons();
+                playerMoved = true;
+            }
+            if(manager.scenes[manager.getInd(curPlayer.location)].numRoles > 0 && playerMoved == true){
+                boolean moreOpts = true;
+                int result = JOptionPane.showConfirmDialog(null, "Do you want to pick a role, if theres one possible?");
+                switch (result) {
+                    case JOptionPane.YES_OPTION:
+                        moreOpts = true;
+                        break;
+                    case JOptionPane.NO_OPTION:
+                        moreOpts = false;
+                        break;
+                    case JOptionPane.CLOSED_OPTION:
+                        moreOpts = false;
+                        break;
+                }
+                if(moreOpts){
+                    moreOptions(manager.scenes[manager.getInd(curPlayer.getLocation())]);
+                }
+
             }
         }
 
@@ -439,7 +403,38 @@ public class BoardLayersListener extends JFrame {
         public void mouseExited(MouseEvent e) {
         }
     }
-
+    private void moreOptions(Scene curScene){
+        int numPartScene = curScene.numRolesInt;
+        int numPartCard = curScene.curCard.numParts;
+        String[] parts = new String[numPartCard+numPartScene];
+        int i;
+        int k;
+        for (i = 0; i < numPartScene; i++) {
+            if (!curScene.parts[i].taken && curScene.parts[i].level <= curPlayer.getRank()) {
+                parts[i] = curScene.parts[i].name;
+            }
+            else{
+                parts[i] = "Invalid: "+curScene.parts[i].name;
+            }
+        }
+        for (k = 0; k < numPartCard; k++) {
+            if (!curScene.curCard.parts[k].taken && curScene.curCard.parts[k].level <= curPlayer.getRank()) {
+                parts[k] = curScene.curCard.parts[k].name;
+            }
+            else {
+                parts[i] = "Invalid: " + curScene.curCard.parts[i].name;
+            }
+        }
+        int choiceInd = (int) JOptionPane.showInputDialog(
+                null,
+                "What role would you like? Invalid roles are prohibited?",
+                "Choose Role",
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                parts,
+                parts[parts.length-1]);
+        curScene.fillRole(choiceInd);
+    }
     private void hideButtons() {
         bmTrainStation.setVisible(false);
         bmSecrectHideout.setVisible(false);

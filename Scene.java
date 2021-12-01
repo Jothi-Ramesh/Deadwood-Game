@@ -1,5 +1,6 @@
 public class Scene {
     String name;
+    int numRolesInt;
     int numRoles;
     int[] filledRoles = new int[0];
     String location;
@@ -13,6 +14,7 @@ public class Scene {
     public Scene(String nameIn, int numRolesIn, int takesIn, String neighborsIn[], Part[] partsIn, String[] areaIn, String[][] takeLocIn){
         name = nameIn;
         numRoles = numRolesIn;
+        numRolesInt = numRoles;
         takes = takesIn;
         neighbors = neighborsIn;
         parts = partsIn;
@@ -44,7 +46,13 @@ public class Scene {
         return location;
     }
 
-    public void fillRole(){}
+    public void fillRole(int roleInd){
+        numRoles--;
+        filledRoles[roleInd] = 1;
+        if(roleInd >numRolesInt){
+            curCard.parts[roleInd-numRolesInt].taken = true;
+        }
+    }
     public void decreaseShot(){}
 
     public String[] getNeighbors() {
@@ -61,8 +69,9 @@ public class Scene {
         for(int i =0; i< tempRoles.length; i++){
             newRoles[i] = filledRoles[i];
         }
+        filledRoles = newRoles;
+        numRoles = newRoles.length;
         curCard = card;
-
     }
     public void wrap(){
         numRoles = 0;
