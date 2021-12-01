@@ -425,7 +425,7 @@ public class BoardLayersListener extends JFrame {
                 parts[i] = "Invalid: " + curScene.curCard.parts[i].name;
             }
         }
-        int choiceInd = (int) JOptionPane.showInputDialog(
+        String choiceInd = (String) JOptionPane.showInputDialog(
                 null,
                 "What role would you like? Invalid roles are prohibited?",
                 "Choose Role",
@@ -433,7 +433,13 @@ public class BoardLayersListener extends JFrame {
                 null,
                 parts,
                 parts[parts.length-1]);
-        curScene.fillRole(choiceInd);
+        int ind = 0;
+        for(int h = 0; h<parts.length; h++){
+            if(parts[h].equals(choiceInd)){
+                ind = h;
+            }
+        }
+        curScene.fillRole(ind);
     }
     private void hideButtons() {
         bmTrainStation.setVisible(false);
