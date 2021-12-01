@@ -1,3 +1,5 @@
+import java.util.Random;
+
 public class Player {
     public int num;
     public String name;
@@ -9,6 +11,8 @@ public class Player {
     private int rehearseLvl;
     public Part part;
     private int level = 0;
+    private int[] tokenLoc;
+    private String image;
 
 
     Player(int startMon, int startCred, String nameS, int numS, int rankS){
@@ -19,9 +23,30 @@ public class Player {
         rank = rankS;
         location = "trailer";
     }
+    public void fillRole(Part curPart, String opts){
+        role = opts;
+        part = curPart;
+        rehearseLvl = 0;
+    }
 
     public int getNum() {
         return num;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public int[] getTokenLoc() {
+        return tokenLoc;
+    }
+
+    public void setTokenLoc(int[] tokenLoc) {
+        this.tokenLoc = tokenLoc;
     }
 
     public int getCredits() {
@@ -57,9 +82,6 @@ public class Player {
         this.level = level;
     }
 
-    public void work(){
-
-    }
     public void move(String location){
 
     }

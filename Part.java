@@ -3,14 +3,16 @@ public class Part{
     String line;
     int level;
     boolean taken;
-    String[] area;
+    int[] area;
+    int onCard;
 
-    public Part(String nName, String nLine, int nLevel, String[] nArea){
+    public Part(String nName, String nLine, int nLevel, int[] nArea, int onCardIn){
         name = nName;
         line = nLine;
         level = nLevel;
         taken = false;
         area = nArea;
+        onCard = onCardIn;
     }
     public String getName() {
         return name;
@@ -22,5 +24,13 @@ public class Part{
 
     public int getLevel() {
         return level;
+    }
+
+    public int[] getArea() {
+        return area;
+    }
+
+    public void setArea(int[] area) {
+        this.area = area;
     }
 }

@@ -1,6 +1,8 @@
 public class LocationManager {
 
     protected int playerCount;
+    public int shoots;
+    public int days;
     protected Scene[] playerLocationList;
     protected Player[] listOfPlayers;
     protected Scene[] scenes;
@@ -15,6 +17,7 @@ public class LocationManager {
             playerLocationList[i] = scenes[10];
         }
         playerLocationList = new Scene[players];
+        shoots = 10;
 
 
     }
@@ -27,6 +30,10 @@ public class LocationManager {
         playerToMove.location = newPosition;
         int ind = getInd(newPosition);
         playerLocationList[playerToMove.num-1] = scenes[ind];
+        int[] area = scenes[ind].getArea();
+        area[2] = 45;
+        area[3] = 45;
+        playerToMove.setTokenLoc(area);
         // add functionality for updating playerLocationList array
     }
 
@@ -45,5 +52,30 @@ public class LocationManager {
             }
         }
         return -1;
+    }
+
+    public void sceneWrap(Scene curScene){
+
+        int onCard = 0;
+        Player[] playersInScene = new Player[curScene.numRoles];
+        int ind = 0;
+        for(int i = 0; i <curScene.filledRoles.length; i++){
+            if(curScene.filledRoles[i] != 0){
+                Player p = listOfPlayers[curScene.filledRoles[i]-1];
+                playersInScene[ind] = p;
+                if(p.part.onCard == 1){
+                    onCard = 1;
+                }
+            }
+        }
+        if(onCard == 1){
+            for(int j = 0; j < playersInScene.length; j++){
+                playersInScene[j].role="no";
+                playersInScene[j].part=null;
+                //add awarding here tomorrow
+            }
+        }
+        shoots--;
+        curScene.numRoles = 0;
     }
 }

@@ -35,19 +35,19 @@ public class Gsystem extends LocationManager {
                     Element neighborE = (Element) neighbor;
                     neighbors[o] = neighborE.getAttribute("name");
                 }
-                String[] xyzInScene = new String[4];
-                xyzInScene[0] = scene.getElementsByTagName("area").item(0).getAttributes().item(2).getTextContent();
-                xyzInScene[1] = scene.getElementsByTagName("area").item(0).getAttributes().item(3).getTextContent();
-                xyzInScene[2] = scene.getElementsByTagName("area").item(0).getAttributes().item(0).getTextContent();
-                xyzInScene[3] = scene.getElementsByTagName("area").item(0).getAttributes().item(1).getTextContent();
+                int[] xyzInScene = new int[4];
+                xyzInScene[0] = Integer.parseInt(scene.getElementsByTagName("area").item(0).getAttributes().item(2).getTextContent());
+                xyzInScene[1] = Integer.parseInt(scene.getElementsByTagName("area").item(0).getAttributes().item(3).getTextContent());
+                xyzInScene[2] = Integer.parseInt(scene.getElementsByTagName("area").item(0).getAttributes().item(0).getTextContent());
+                xyzInScene[3] = Integer.parseInt(scene.getElementsByTagName("area").item(0).getAttributes().item(1).getTextContent());
                 NodeList takeList = ((Element) curScene).getElementsByTagName("take");
                 int takes = Integer.parseInt(((Element) takeList.item(0)).getAttribute("number"));
-                String[][] takesLoc = new String[takes][4];
+                int[][] takesLoc = new int[takes][4];
                 for (int g = 0; g < takes; g ++){
-                    takesLoc[g][0] = scene.getElementsByTagName("area").item(0).getAttributes().item(2).getTextContent();
-                    takesLoc[g][1] = scene.getElementsByTagName("area").item(0).getAttributes().item(3).getTextContent();
-                    takesLoc[g][2] = scene.getElementsByTagName("area").item(0).getAttributes().item(0).getTextContent();
-                    takesLoc[g][3] = scene.getElementsByTagName("area").item(0).getAttributes().item(1).getTextContent();
+                    takesLoc[g][0] = Integer.parseInt(scene.getElementsByTagName("area").item(0).getAttributes().item(2).getTextContent());
+                    takesLoc[g][1] = Integer.parseInt(scene.getElementsByTagName("area").item(0).getAttributes().item(3).getTextContent());
+                    takesLoc[g][2] = Integer.parseInt(scene.getElementsByTagName("area").item(0).getAttributes().item(0).getTextContent());
+                    takesLoc[g][3] = Integer.parseInt(scene.getElementsByTagName("area").item(0).getAttributes().item(1).getTextContent());
                 }
                 NodeList partList = ((Element) curScene).getElementsByTagName("part");
                 int numParts = partList.getLength();
@@ -57,22 +57,22 @@ public class Gsystem extends LocationManager {
                     Element partE = (Element) partN;
                     String pName = partE.getAttribute("name");
                     int pLevel = Integer.parseInt(partE.getAttribute("level"));
-                    String[] xyzIn = new String[4];
-                    xyzIn[0] = partE.getElementsByTagName("area").item(0).getAttributes().item(2).getTextContent();
-                    xyzIn[1] = partE.getElementsByTagName("area").item(0).getAttributes().item(3).getTextContent();
-                    xyzIn[2] = partE.getElementsByTagName("area").item(0).getAttributes().item(0).getTextContent();
-                    xyzIn[3] = partE.getElementsByTagName("area").item(0).getAttributes().item(1).getTextContent();
+                    int[] xyzIn = new int[4];
+                    xyzIn[0] = Integer.parseInt(partE.getElementsByTagName("area").item(0).getAttributes().item(2).getTextContent());
+                    xyzIn[1] = Integer.parseInt(partE.getElementsByTagName("area").item(0).getAttributes().item(3).getTextContent());
+                    xyzIn[2] = Integer.parseInt(partE.getElementsByTagName("area").item(0).getAttributes().item(0).getTextContent());
+                    xyzIn[3] = Integer.parseInt(partE.getElementsByTagName("area").item(0).getAttributes().item(1).getTextContent());
 
                     String pLine = partE.getElementsByTagName("line").item(0).getTextContent();
-                    parts[k] = new Part(pName, pLine, pLevel, xyzIn);
+                    parts[k] = new Part(pName, pLine, pLevel, xyzIn, 0);
                 }
                 scenes[j] = new Scene(name, numParts, takes, neighbors, parts, xyzInScene, takesLoc);
             }
         }
         String[] oNeighbors = {"Train station", "Ranch", "Secret Hideout"};
-        String[] tNeighbors = {"Main Street", "Saloon", "Secret Hideout"};
-        String[] tArea = {"991","248","194","201"};
-        String[] oArea = {"9","459","208","209"};
+        String[] tNeighbors = {"Main Street", "Saloon", "Hotel"};
+        int[] tArea = {991,248,194,201};
+        int[] oArea = {9,459,208,209};
         scenes[10] = new Scene("trailer", 0, 0, tNeighbors, null,tArea, null);
         scenes[11] = new Scene("office", 0, 0, oNeighbors, null, oArea, null);
 
@@ -101,12 +101,12 @@ public class Gsystem extends LocationManager {
                     String pName = partE.getAttribute("name");
                     int pLevel = Integer.parseInt(partE.getAttribute("level"));
                     String pLine = partE.getElementsByTagName("line").item(0).getTextContent();
-                    String[] xyzIn = new String[4];
-                    xyzIn[0] = partE.getElementsByTagName("area").item(0).getAttributes().item(2).getTextContent();
-                    xyzIn[1] = partE.getElementsByTagName("area").item(0).getAttributes().item(3).getTextContent();
-                    xyzIn[2] = partE.getElementsByTagName("area").item(0).getAttributes().item(0).getTextContent();
-                    xyzIn[3] = partE.getElementsByTagName("area").item(0).getAttributes().item(1).getTextContent();
-                    parts[k] = new Part(pName, pLine, pLevel, xyzIn);
+                    int[] xyzIn = new int[4];
+                    xyzIn[0] = Integer.parseInt(partE.getElementsByTagName("area").item(0).getAttributes().item(2).getTextContent());
+                    xyzIn[1] = Integer.parseInt(partE.getElementsByTagName("area").item(0).getAttributes().item(3).getTextContent());
+                    xyzIn[2] = Integer.parseInt(partE.getElementsByTagName("area").item(0).getAttributes().item(0).getTextContent());
+                    xyzIn[3] = Integer.parseInt(partE.getElementsByTagName("area").item(0).getAttributes().item(1).getTextContent());
+                    parts[k] = new Part(pName, pLine, pLevel, xyzIn, 1);
                 }
                 cards[i] = new Card(cardName, line, cardNum, cardBudget, numParts, parts);
             }
