@@ -3,12 +3,14 @@ public class Part{
     String line;
     int level;
     boolean taken;
+    String[] area;
 
-    public Part(String nName, String nLine, int nLevel){
+    public Part(String nName, String nLine, int nLevel, String[] nArea){
         name = nName;
         line = nLine;
         level = nLevel;
         taken = false;
+        area = nArea;
     }
     public String getName() {
         return name;

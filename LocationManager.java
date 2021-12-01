@@ -8,7 +8,7 @@ public class LocationManager {
     // Create a LocationManager object corresponding to the amount of players
     public LocationManager(int players, Scene[] scenesDict, Player[] playerList) {
         playerCount = players;
-        listOfPlayers = new Player[players];
+        listOfPlayers = playerList;
         scenes = scenesDict;
         playerLocationList = new Scene[playerCount];
         for(int i =0; i < playerCount; i++){

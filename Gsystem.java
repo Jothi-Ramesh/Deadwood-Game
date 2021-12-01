@@ -15,10 +15,10 @@ public class Gsystem extends LocationManager {
     public Card[] cardsArr;
 
     // Create a System object corresponding to the amount of players in the game
-    public Gsystem(int players) throws ParserConfigurationException {
+    public Gsystem() throws ParserConfigurationException {
 
         //time to build board
-        Document boardDoc = getDocFromFile("Deadwood-Game/board.xml");
+        Document boardDoc = getDocFromFile("Deadwood-Game/Deadwood-Game/board.xml");
         boardDoc.getDocumentElement().normalize();
         NodeList list = boardDoc.getElementsByTagName("set");
         Scene[] scenes = new Scene[12];
@@ -35,8 +35,20 @@ public class Gsystem extends LocationManager {
                     Element neighborE = (Element) neighbor;
                     neighbors[o] = neighborE.getAttribute("name");
                 }
+                String[] xyzInScene = new String[4];
+                xyzInScene[0] = scene.getElementsByTagName("area").item(0).getAttributes().item(2).getTextContent();
+                xyzInScene[1] = scene.getElementsByTagName("area").item(0).getAttributes().item(3).getTextContent();
+                xyzInScene[2] = scene.getElementsByTagName("area").item(0).getAttributes().item(0).getTextContent();
+                xyzInScene[3] = scene.getElementsByTagName("area").item(0).getAttributes().item(1).getTextContent();
                 NodeList takeList = ((Element) curScene).getElementsByTagName("take");
                 int takes = Integer.parseInt(((Element) takeList.item(0)).getAttribute("number"));
+                String[][] takesLoc = new String[takes][4];
+                for (int g = 0; g < takes; g ++){
+                    takesLoc[g][0] = scene.getElementsByTagName("area").item(0).getAttributes().item(2).getTextContent();
+                    takesLoc[g][1] = scene.getElementsByTagName("area").item(0).getAttributes().item(3).getTextContent();
+                    takesLoc[g][2] = scene.getElementsByTagName("area").item(0).getAttributes().item(0).getTextContent();
+                    takesLoc[g][3] = scene.getElementsByTagName("area").item(0).getAttributes().item(1).getTextContent();
+                }
                 NodeList partList = ((Element) curScene).getElementsByTagName("part");
                 int numParts = partList.getLength();
                 Part[] parts = new Part[numParts];
@@ -45,19 +57,27 @@ public class Gsystem extends LocationManager {
                     Element partE = (Element) partN;
                     String pName = partE.getAttribute("name");
                     int pLevel = Integer.parseInt(partE.getAttribute("level"));
+                    String[] xyzIn = new String[4];
+                    xyzIn[0] = partE.getElementsByTagName("area").item(0).getAttributes().item(2).getTextContent();
+                    xyzIn[1] = partE.getElementsByTagName("area").item(0).getAttributes().item(3).getTextContent();
+                    xyzIn[2] = partE.getElementsByTagName("area").item(0).getAttributes().item(0).getTextContent();
+                    xyzIn[3] = partE.getElementsByTagName("area").item(0).getAttributes().item(1).getTextContent();
+
                     String pLine = partE.getElementsByTagName("line").item(0).getTextContent();
-                    parts[k] = new Part(pName, pLine, pLevel);
+                    parts[k] = new Part(pName, pLine, pLevel, xyzIn);
                 }
-                scenes[j] = new Scene(name, numParts, takes, neighbors, parts);
+                scenes[j] = new Scene(name, numParts, takes, neighbors, parts, xyzInScene, takesLoc);
             }
         }
         String[] oNeighbors = {"Train station", "Ranch", "Secret Hideout"};
         String[] tNeighbors = {"Main Street", "Saloon", "Secret Hideout"};
-        scenes[10] = new Scene("trailer", 0, 0, tNeighbors, null);
-        scenes[11] = new Scene("office", 0, 0, oNeighbors, null);
+        String[] tArea = {"991","248","194","201"};
+        String[] oArea = {"9","459","208","209"};
+        scenes[10] = new Scene("trailer", 0, 0, tNeighbors, null,tArea, null);
+        scenes[11] = new Scene("office", 0, 0, oNeighbors, null, oArea, null);
 
         //build cards
-        Document cardDoc = getDocFromFile("Deadwood-Game/cards.xml");
+        Document cardDoc = getDocFromFile("Deadwood-Game/Deadwood-Game/cards.xml");
         cardDoc.getDocumentElement().normalize();
         NodeList cardList = cardDoc.getElementsByTagName("card");
         int cardLen = cardList.getLength();
@@ -81,7 +101,12 @@ public class Gsystem extends LocationManager {
                     String pName = partE.getAttribute("name");
                     int pLevel = Integer.parseInt(partE.getAttribute("level"));
                     String pLine = partE.getElementsByTagName("line").item(0).getTextContent();
-                    parts[k] = new Part(pName, pLine, pLevel);
+                    String[] xyzIn = new String[4];
+                    xyzIn[0] = partE.getElementsByTagName("area").item(0).getAttributes().item(2).getTextContent();
+                    xyzIn[1] = partE.getElementsByTagName("area").item(0).getAttributes().item(3).getTextContent();
+                    xyzIn[2] = partE.getElementsByTagName("area").item(0).getAttributes().item(0).getTextContent();
+                    xyzIn[3] = partE.getElementsByTagName("area").item(0).getAttributes().item(1).getTextContent();
+                    parts[k] = new Part(pName, pLine, pLevel, xyzIn);
                 }
                 cards[i] = new Card(cardName, line, cardNum, cardBudget, numParts, parts);
             }
@@ -286,6 +311,14 @@ public class Gsystem extends LocationManager {
     private void moveAllPlayersToTrailers() {
 
     }
+    public int getInd(String location){
+        for(int i = 0; i < scenesArr.length; i ++){
+            if(scenesArr[i].name.equals(location)){
+                return i;
+            }
+        }
+        return -1;
+    }
     
     // MAIN METHOD
     public static void main(String[] args) throws ParserConfigurationException {
@@ -362,7 +395,7 @@ public class Gsystem extends LocationManager {
             name = scan.nextLine();
             Gplayers[i].name = name;
         }
-    	Gsystem gsys = new Gsystem(people);
+    	Gsystem gsys = new Gsystem();
         LocationManager manager = new LocationManager(people, gsys.scenesArr, Gplayers);
         manager.listOfPlayers = Gplayers;
         manager.playerLocationList=gsys.scenesArr;

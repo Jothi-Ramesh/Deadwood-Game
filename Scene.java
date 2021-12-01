@@ -7,8 +7,10 @@ public class Scene {
     Part[] parts;
     Card curCard;
     int takes;
+    String[] area;
+    String[][] takeLoc;
 
-    public Scene(String nameIn, int numRolesIn, int takesIn, String neighborsIn[], Part[] partsIn){
+    public Scene(String nameIn, int numRolesIn, int takesIn, String neighborsIn[], Part[] partsIn, String[] areaIn, String[][] takeLocIn){
         name = nameIn;
         numRoles = numRolesIn;
         takes = takesIn;
@@ -18,6 +20,8 @@ public class Scene {
         for (int i = 0; i < numRoles; i ++){
             filledRoles[i] = 0;
         }
+        area = areaIn;
+        takeLoc = takeLocIn;
 
     }
     public int[] getFilledRoles() {
@@ -45,6 +49,10 @@ public class Scene {
 
     public String[] getNeighbors() {
         return neighbors;
+    }
+
+    public String[] getArea() {
+        return area;
     }
 
     public void addCard(Card card){

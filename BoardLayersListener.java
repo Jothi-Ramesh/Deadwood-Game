@@ -17,31 +17,54 @@ import java.util.Scanner;
 import javax.swing.JOptionPane;
 import javax.xml.parsers.ParserConfigurationException;
 import java.util.*;
+
 public class BoardLayersListener extends JFrame {
+    public static Gsystem gsys;
+    public static LocationManager manager;
+    public static Player curPlayer;
+    public static int turnCounter;
 
     // JLabels
     JLabel boardlabel;
     JLabel cardlabel;
     JLabel playerlabel;
     JLabel mLabel;
+    JLabel butLabel;
 
     //JButtons
     JButton bAct;
     JButton bRehearse;
     JButton bMove;
+    JButton bUpgrade;
+    JButton bEndTurn;
+    JButton bmTrailer;
+    JButton bmOffice;
+    JButton bmTrainStation;
+    JButton bmSecrectHideout;
+    JButton bmChurch;
+    JButton bmHotel;
+    JButton bmMainStreet;
+    JButton bmJail;
+    JButton bmGeneralStore;
+    JButton bmRanch;
+    JButton bmBank;
+    JButton bmSaloon;
 
     // JLayered Pane
     JLayeredPane bPane;
 
     // Constructor
 
-    public BoardLayersListener() {
+    public BoardLayersListener() throws ParserConfigurationException {
+
 
         // Set the title of the JFrame
         super("Deadwood");
+
         // Set the exit option for the JFrame
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-
+        gsys = new Gsystem();
+        manager = new LocationManager();
         // Create the JLayeredPane to hold the display, cards, dice and buttons
         bPane = getLayeredPane();
 
@@ -99,10 +122,122 @@ public class BoardLayersListener extends JFrame {
         bMove.setBounds(icon.getIconWidth() + 10, 90, 100, 20);
         bMove.addMouseListener(new boardMouseListener());
 
+        bUpgrade = new JButton("UPGRADE");
+        bUpgrade.setBackground(Color.white);
+        bUpgrade.setBounds(icon.getIconWidth() + 10, 120, 100, 20);
+        bUpgrade.addMouseListener(new boardMouseListener());
+
+        bEndTurn = new JButton("END TURN");
+        bEndTurn.setBackground(Color.white);
+        bEndTurn.setBounds(icon.getIconWidth() + 10, 150, 150, 20);
+        bEndTurn.addMouseListener(new boardMouseListener());
+
+        String[] area;
+
+        bmTrainStation = new JButton("Train Station");
+        bmTrainStation.setName("Train Station");
+        bmTrainStation.setBackground(Color.white);
+        area = gsys.scenesArr[gsys.getInd("Train Station")].getArea();
+        bmTrainStation.setBounds(Integer.parseInt(area[0]), Integer.parseInt(area[1]), 100, 20);
+        bmTrainStation.addMouseListener(new boardMouseListener());
+        bmTrainStation.setVisible(false);
+
+        bmSecrectHideout = new JButton("Secret Hideout");
+        bmSecrectHideout.setBackground(Color.white);
+        area = gsys.scenesArr[gsys.getInd("Secret Hideout")].getArea();
+        bmSecrectHideout.setBounds(Integer.parseInt(area[0]), Integer.parseInt(area[1]), 100, 20);
+        bmSecrectHideout.addMouseListener(new boardMouseListener());
+        bmSecrectHideout.setVisible(false);
+
+        bmChurch = new JButton("Church");
+        bmChurch.setBackground(Color.white);
+        area = gsys.scenesArr[gsys.getInd("Church")].getArea();
+        bmChurch.setBounds(Integer.parseInt(area[0]), Integer.parseInt(area[1]), 100, 20);
+        bmChurch.addMouseListener(new boardMouseListener());
+        bmChurch.setVisible(false);
+
+        bmHotel = new JButton("Hotel");
+        bmHotel.setBackground(Color.white);
+        area = gsys.scenesArr[gsys.getInd("Hotel")].getArea();
+        bmHotel.setBounds(Integer.parseInt(area[0]), Integer.parseInt(area[1]), 100, 20);
+        bmHotel.addMouseListener(new boardMouseListener());
+        bmHotel.setVisible(false);
+
+        bmMainStreet = new JButton("Main Street");
+        bmMainStreet.setBackground(Color.white);
+        area = gsys.scenesArr[gsys.getInd("Main Street")].getArea();
+        bmMainStreet.setBounds(Integer.parseInt(area[0]), Integer.parseInt(area[1]), 100, 20);
+        bmMainStreet.addMouseListener(new boardMouseListener());
+        bmMainStreet.setVisible(false);
+
+        bmJail = new JButton("Jail");
+        bmJail.setBackground(Color.white);
+        area = gsys.scenesArr[gsys.getInd("Jail")].getArea();
+        bmJail.setBounds(Integer.parseInt(area[0]), Integer.parseInt(area[1]), 100, 20);
+        bmJail.addMouseListener(new boardMouseListener());
+        bmJail.setVisible(false);
+
+        bmGeneralStore = new JButton("General Store");
+        bmGeneralStore.setBackground(Color.white);
+        area = gsys.scenesArr[gsys.getInd("General Store")].getArea();
+        bmGeneralStore.setBounds(Integer.parseInt(area[0]), Integer.parseInt(area[1]), 100, 20);
+        bmGeneralStore.addMouseListener(new boardMouseListener());
+        bmGeneralStore.setVisible(false);
+
+        bmRanch = new JButton("Ranch");
+        bmRanch.setBackground(Color.white);
+        area = gsys.scenesArr[gsys.getInd("Ranch")].getArea();
+        bmRanch.setBounds(Integer.parseInt(area[0]), Integer.parseInt(area[1]), 100, 20);
+        bmRanch.addMouseListener(new boardMouseListener());
+        bmRanch.setVisible(false);
+
+        bmBank = new JButton("Bank");
+        bmBank.setBackground(Color.white);
+        area = gsys.scenesArr[gsys.getInd("Bank")].getArea();
+        bmBank.setBounds(Integer.parseInt(area[0]), Integer.parseInt(area[1]), 100, 20);
+        bmBank.addMouseListener(new boardMouseListener());
+        bmBank.setVisible(false);
+
+        bmSaloon = new JButton("Saloon");
+        bmSaloon.setBackground(Color.white);
+        area = gsys.scenesArr[gsys.getInd("Saloon")].getArea();
+        bmSaloon.setBounds(Integer.parseInt(area[0]), Integer.parseInt(area[1]), 100, 20);
+        bmSaloon.addMouseListener(new boardMouseListener());
+        bmSaloon.setVisible(false);
+
+        bmTrailer = new JButton("trailer");
+        bmTrailer.setBackground(Color.white);
+        area = gsys.scenesArr[gsys.getInd("trailer")].getArea();
+        bmTrailer.setBounds(Integer.parseInt(area[0]), Integer.parseInt(area[1]), 100, 20);
+        bmTrailer.addMouseListener(new boardMouseListener());
+        bmTrailer.setVisible(false);
+
+        bmOffice = new JButton("office");
+        bmOffice.setBackground(Color.white);
+        area = gsys.scenesArr[gsys.getInd("office")].getArea();
+        bmOffice.setBounds(Integer.parseInt(area[0]), Integer.parseInt(area[1]), 100, 20);
+        bmOffice.addMouseListener(new boardMouseListener());
+        bmOffice.setVisible(false);
+
         // Place the action buttons in the top layer
         bPane.add(bAct, new Integer(2));
         bPane.add(bRehearse, new Integer(2));
         bPane.add(bMove, new Integer(2));
+        bPane.add(bUpgrade, new Integer(2));
+        bPane.add(bEndTurn, new Integer(2));
+        bPane.add(bmTrainStation, new Integer(2));
+        bPane.add(bmSecrectHideout, new Integer(2));
+        bPane.add(bmChurch, new Integer(2));
+        bPane.add(bmHotel, new Integer(2));
+        bPane.add(bmMainStreet, new Integer(2));
+        bPane.add(bmJail, new Integer(2));
+        bPane.add(bmGeneralStore, new Integer(2));
+        bPane.add(bmRanch, new Integer(2));
+        bPane.add(bmBank, new Integer(2));
+        bPane.add(bmSaloon, new Integer(2));
+        bPane.add(bmOffice, new Integer(2));
+        bPane.add(bmTrailer, new Integer(2));
+        turnCounter = 0;
     }
 
     // This class implements Mouse Events
@@ -110,64 +245,114 @@ public class BoardLayersListener extends JFrame {
     class boardMouseListener implements MouseListener {
 
         // Code for the different button clicks
-        public void mouseClicked(MouseEvent e, Player p) {
+        public void mouseClicked(MouseEvent e) {
 
+            Player p = curPlayer;
+            if(e.getSource() == bEndTurn){
+                turnCounter++;
+            }
             if (e.getSource() == bAct) {
                 playerlabel.setVisible(true);
                 System.out.println("Acting is Selected\n");
             } else if (e.getSource() == bRehearse) {
                 System.out.println("Rehearse is Selected\n");
+            } else if(e.getSource() == bUpgrade){
+
             } else if (e.getSource() == bMove) {
                 System.out.println("Move is Selected\n");
                 // initialize JFrame object for the list of move choices
-                JFrame moveChoices = new JFrame();
+
                 // get currentLocation of player
-                String curLocation = p.getLocation();
-                if(curLocation.equals("Train Station")) {
-                	JButton neighbor1 = new JButton("Jail");
+                Scene curScene = manager.scenes[manager.getInd(p.getLocation())];
+
+                int neighborLen = curScene.neighbors.length;
+                String[] neighbors = curScene.getNeighbors();
+
+                for (int g = 0; g < neighborLen; g++) {
+                    if (neighbors[g].equals("Train Station")) {
+                        bmTrainStation.setVisible(true);
+                    }
+                    if (neighbors[g].equals("Secret Hideout")) {
+                        bmSecrectHideout.setVisible(true);
+                    }
+                    if (neighbors[g].equals("Church")) {
+                        bmChurch.setVisible(true);
+                    }
+                    if (neighbors[g].equals("Hotel")) {
+                        bmHotel.setVisible(true);
+                    }
+                    if (neighbors[g].equals("Main Street")) {
+                        bmMainStreet.setVisible(true);
+                    }
+                    if (neighbors[g].equals("Jail")) {
+                        bmJail.setVisible(true);
+                    }
+                    if (neighbors[g].equals("General Store")) {
+                        bmGeneralStore.setVisible(true);
+                    }
+                    if (neighbors[g].equals("Ranch")) {
+                        bmRanch.setVisible(true);
+                    }
+                    if (neighbors[g].equals("Bank")) {
+                        bmBank.setVisible(true);
+                    }
+                    if (neighbors[g].equals("Saloon")) {
+                        bmSaloon.setVisible(true);
+                    }
+                    if (neighbors[g].equals("trailer")) {
+                        bmTrailer.setVisible(true);
+                    }
+                    if (neighbors[g].equals("office")) {
+                        bmOffice.setVisible(true);
+                    }
+
+                }
+                /*
+                if(curScene.name.equals("Train Station")) {
+                	bmJail.setOpaque(false);
                 	JButton neighbor2 = new JButton("General Store");
                 	JButton neighbor3 = new JButton("office");
-                } else if(curLocation.equals("Secret Hideout")) {
+                } else if(curScene.name.equals("Secret Hideout")) {
                 	JButton neighbor1 = new JButton("Church");
                 	JButton neighbor2 = new JButton("Ranch");
                 	JButton neighbor3 = new JButton("office");
-                } else if(curLocation.equals("Church")) {
+                } else if(curScene.name.equals("Church")) {
                 	JButton neighbor1 = new JButton("Secret Hideout");
                 	JButton neighbor2 = new JButton("Bank");
                 	JButton neighbor3 = new JButton("Hotel");
-                } else if(curLocation.equals("Hotel")) {
+                } else if(curScene.name.equals("Hotel")) {
                 	JButton neighbor1 = new JButton("trailer");
                 	JButton neighbor2 = new JButton("Bank");
                 	JButton neighbor3 = new JButton("Church");
-                } else if(curLocation.equals("Main Street")) {
+                } else if(curScene.name.equals("Main Street")) {
                 	JButton neighbor1 = new JButton("trailer");
                 	JButton neighbor2 = new JButton("Jail");
                 	JButton neighbor3 = new JButton("Saloon");
-                } else if(curLocation.equals("Jail")) {
+                } else if(curScene.name.equals("Jail")) {
                 	JButton neighbor1 = new JButton("Main Street");
                 	JButton neighbor2 = new JButton("General Store");
                 	JButton neighbor3 = new JButton("Train Station");
-                } else if(curLocation.equals("General Store")) {
+                } else if(curScene.name.equals("General Store")) {
                 	JButton neighbor1 = new JButton("Ranch");
                 	JButton neighbor2 = new JButton("Train Station");
                 	JButton neighbor3 = new JButton("Jail");
                 	JButton neighbor4 = new JButton("Saloon");
-                } else if(curLocation.equals("Ranch")) {
+                } else if(curScene.name.equals("Ranch")) {
                 	JButton neighbor1 = new JButton("office");
                 	JButton neighbor2 = new JButton("General Store");
                 	JButton neighbor3 = new JButton("Secret Hideout");
-                	JButton neighbor4 = new JButton("Bank")
-                } else if(curLocation.equals("Bank")) {
+                	JButton neighbor4 = new JButton("Bank");
+                } else if(curScene.name.equals("Bank")) {
                 	JButton neighbor1 = new JButton("Saloon");
                 	JButton neighbor2 = new JButton("Church");
                 	JButton neighbor3 = new JButton("Ranch");
                 	JButton neighbor4 = new JButton("Hotel");
-                } else if(curLocation.equals("Saloon")) {
+                } else if(curScene.name.equals("Saloon")) {
                 	JButton neighbor1 = new JButton("Main Street");
                 	JButton neighbor2 = new JButton("General Store");
                 	JButton neighbor3 = new JButton("Bank");
                 	JButton neighbor4 = new JButton("trailer");
-                } else if(curLocation.equals("trailer")) {
+                } else if(curScene.name.equals("trailer")) {
                 	JButton neighbor1 = new JButton("Main Street");
                 	JButton neighbor2 = new JButton("Saloon");
                 	JButton neighbor3 = new JButton("Hotel");
@@ -177,27 +362,68 @@ public class BoardLayersListener extends JFrame {
                 	JButton neighbor2 = new JButton("Ranch");
                 	JButton neighbor3 = new JButton("Secret Hideout");
                 }
-                
-                
-                
+
+
+
+
                 JFrame moveChoices = new JFrame();
                 moveChoices.setSize(300,600);
                 moveChoices.setTitle("Move Choices");
-                
+
                 JButton but1 = new JButton("hi");
                 JButton but2 = new JButton("hola");
-                
-                int indScene = manager.getInd(location);
-	    	    String[] neighbors = gsys.scenesArr[indScene].neighbors;
-	    	    
-	    	    for(int j = 0; j < neighbors.length; j++){
-                    System.out.print(j+". "+neighbors[j]+"  ");
-                    if(gsys.scenesArr[manager.getInd(neighbors[j])].numRoles == 0){
-                        System.out.print("(no roles or wrapped)");
-                    }
-                }
-                moveChoices.setVisible(true);
 
+                 */
+
+
+            } else if (e.getSource() == bmTrainStation) {
+                manager.movePlayer(p, "Train Station");
+                hideButtons();
+                disableButtons();
+            } else if (e.getSource() == bmSecrectHideout) {
+                manager.movePlayer(p, "Secret Hideout");
+                hideButtons();
+                disableButtons();
+            } else if (e.getSource() == bmChurch) {
+                manager.movePlayer(p, "Church");
+                hideButtons();
+                disableButtons();
+            } else if (e.getSource() == bmHotel) {
+                manager.movePlayer(p, "Hotel");
+                hideButtons();
+                disableButtons();
+            } else if (e.getSource() == bmMainStreet) {
+                manager.movePlayer(p, "Main Street");
+                hideButtons();
+                disableButtons();
+            } else if (e.getSource() == bmJail) {
+                manager.movePlayer(p, "Jail");
+                hideButtons();
+                disableButtons();
+            } else if (e.getSource() == bmGeneralStore) {
+                manager.movePlayer(p, "General Store");
+                hideButtons();
+                disableButtons();
+            } else if (e.getSource() == bmRanch) {
+                manager.movePlayer(p, "Ranch");
+                hideButtons();
+                disableButtons();
+            } else if (e.getSource() == bmBank) {
+                manager.movePlayer(p, "Bank");
+                hideButtons();
+                disableButtons();
+            } else if (e.getSource() == bmSaloon) {
+                manager.movePlayer(p, "Saloon");
+                hideButtons();
+                disableButtons();
+            } else if (e.getSource() == bmTrailer) {
+                manager.movePlayer(p, "trailer");
+                hideButtons();
+                disableButtons();
+            } else if (e.getSource() == bmOffice) {
+                manager.movePlayer(p, "Office");
+                hideButtons();
+                disableButtons();
             }
         }
 
@@ -214,6 +440,28 @@ public class BoardLayersListener extends JFrame {
         }
     }
 
+    private void hideButtons() {
+        bmTrainStation.setVisible(false);
+        bmSecrectHideout.setVisible(false);
+        bmChurch.setVisible(false);
+        bmHotel.setVisible(false);
+        bmMainStreet.setVisible(false);
+        bmJail.setVisible(false);
+        bmGeneralStore.setVisible(false);
+        bmRanch.setVisible(false);
+        bmBank.setVisible(false);
+        bmSaloon.setVisible(false);
+        bmTrailer.setVisible(false);
+        bmOffice.setVisible(false);
+    }
+
+    private void disableButtons(){
+        bMove.setEnabled(false);
+        bUpgrade.setEnabled(false);
+        bAct.setEnabled(false);
+        bRehearse.setEnabled(false);
+    }
+
 
     public static void main(String[] args) throws ParserConfigurationException {
 
@@ -222,10 +470,10 @@ public class BoardLayersListener extends JFrame {
 
         // Take input from the user about number of players
         int playerCount = Integer.parseInt(JOptionPane.showInputDialog(board, "How many players? (2-8)"));
-        while(playerCount < 2 || playerCount > 8) {
-        	playerCount = Integer.parseInt(JOptionPane.showInputDialog(board, "invalid choice, please choose a valid amount! (2-8)"));
-    	}
-        
+        while (playerCount < 2 || playerCount > 8) {
+            playerCount = Integer.parseInt(JOptionPane.showInputDialog(board, "invalid choice, please choose a valid amount! (2-8)"));
+        }
+
 
         Player[] Gplayers = new Player[playerCount];
         // Choose the correct game format based on playercount
@@ -281,73 +529,26 @@ public class BoardLayersListener extends JFrame {
         }
 
         // create a variable to keep track of the total turns, we will also use this as a mechanism to determine whos turn it is by using modular arithmetic!
-        int turnCounter = 0;
 
         for (int i = 0; i < playerCount; i++) {
             Gplayers[i].name = JOptionPane.showInputDialog(board, "What is this players name?");
         }
-        
-        Scanner scan = new Scanner(System.in);
-        Gsystem gsys = new Gsystem(playerCount);
-        LocationManager manager = new LocationManager(playerCount, gsys.scenesArr, Gplayers);
+
+
+        manager = new LocationManager(playerCount, board.gsys.scenesArr, Gplayers);
         manager.listOfPlayers = Gplayers;
-        manager.playerLocationList = gsys.scenesArr;
+        gsys = new Gsystem();
         boolean gameEnded = false;
         while (!gameEnded) {
-            int playerTurn = (turnCounter % playerCount) + 1;
-            char playerSelection = 0;
-            Player curPlayer = Gplayers[playerTurn - 1];
-            if (curPlayer.location == "trailer" || curPlayer.location == "office" || gsys.scenesArr[manager.getInd(curPlayer.location)].numRoles == 0) {
-                if (curPlayer.location == "office") {
-                    System.out.println("Player " + playerTurn + " it is your turn.\nPlease select move \'m\' or upgrade \'u\'");
-                    playerSelection = scan.nextLine().charAt(0);
-                    // prompt again if player selection is not valid
-                    while (!(playerSelection == 'm' || playerSelection == 'u')) {
-                        System.out.println("Invalid selection, please choose again!");
-                        System.out.println("Player " + playerTurn + " it is your turn.\nPlease select move or upgrade \'u\'");
-                        playerSelection = scan.next().charAt(0);
-                    }
-                } else {
-                    System.out.println("Player " + playerTurn + " it is your turn.\nPlease select move \'m\'");
-                    playerSelection = scan.nextLine().charAt(0);
-                    // prompt again if player selection is not valid
-                    while (!(playerSelection == 'm')) {
-                        System.out.println("Invalid selection, please choose again!");
-                        System.out.println("Player " + playerTurn + " it is your turn.\nPlease select move");
-                        playerSelection = scan.next().charAt(0);
-                    }
-                }
-            } else {
-                System.out.println("Player " + playerTurn + " it is your turn.\nPlease select move \'m\' or work \'w\' or rehearse \'r\'");
-                playerSelection = scan.nextLine().charAt(0);
-                // prompt again if player selection is not valid
-                while (!(playerSelection == 'm' || playerSelection == 'w' || playerSelection == 'a' || playerSelection == 'r')) {
-                    System.out.println("Invalid selection, please choose again!");
-                    System.out.println("Player " + playerTurn + " it is your turn.\nPlease select move \'m\' or work \'w\' or rehearse \'r\'");
-                    playerSelection = scan.next().charAt(0);
-                }
-                // the current player object can be referenced by theLocationManager.listOfPlayers[playerTurn - 1]
-                while (playerSelection == 'm' && !manager.listOfPlayers[playerTurn - 1].role.equals("no")) {
-                    System.out.println("You cannot move while you currently have a role.");
-                    System.out.println("Player " + playerTurn + " it is your turn.\nPlease select move \'m\' or work \'w\' or rehearse \'r\'");
-                    playerSelection = scan.next().charAt(0);
-                }
-                while (playerSelection == 'w' && (curPlayer.role.equals("yes")) || curPlayer.location == "trailer" || curPlayer.location == "office") {
-                    System.out.println("You cannot work while you already have a role!");
-                    System.out.println("Player " + playerTurn + " it is your turn.\nPlease select move \'m\' or work \'w\' or rehearse \'r\'");
-                    playerSelection = scan.next().charAt(0);
-                }
-                while (playerSelection == 'a' && manager.listOfPlayers[playerTurn - 1].role.equals("no")) {
-                    System.out.println("You need to have a role in order to act");
-                    System.out.println("Player " + playerTurn + " it is your turn.\nPlease select move \'m\' or work \'w\' or rehearse \'r\'");
-                    playerSelection = scan.next().charAt(0);
-                }
-                while (playerSelection == 'r' && manager.listOfPlayers[playerTurn - 1].role.equals("no")) {
-                    System.out.println("You need to have a role in order to rehearse");
-                    System.out.println("Player " + playerTurn + " it is your turn.\nPlease select move \'m\' or work \'w\' or rehearse \'r\'");
-                    playerSelection = scan.next().charAt(0);
-                }
+            int playerTurn = (turnCounter % playerCount);
+            curPlayer = manager.listOfPlayers[playerTurn];
+            System.out.println(curPlayer.name);
+            int curTurn = turnCounter;
+            while (curTurn == turnCounter) {
+
             }
+
+            /*
             if (playerSelection == 'u') {
                 System.out.println("Welcome to the office! we hear you'd like to upgrade your player!");
                 System.out.println("|Rank    |Dollars |Credits |");
@@ -370,7 +571,7 @@ public class BoardLayersListener extends JFrame {
                     if (choiceInt == 10) {
                         upgradeDone = true;
                     } else {
-                        int done = gsys.awardRank(curPlayer, choiceInt, currChoice);
+                        int done = board.gsys.awardRank(curPlayer, choiceInt, currChoice);
                         if (done == 1) {
                             upgradeDone = true;
                         }
@@ -388,11 +589,11 @@ public class BoardLayersListener extends JFrame {
             if (playerSelection == 'm') {
                 String location = curPlayer.location;
                 int indScene = manager.getInd(location);
-                String[] neighbors = gsys.scenesArr[indScene].neighbors;
+                String[] neighbors = board.gsys.scenesArr[indScene].neighbors;
                 System.out.println("You could move to the following locations:");
                 for (int j = 0; j < neighbors.length; j++) {
                     System.out.print(j + ". " + neighbors[j] + "  ");
-                    if (gsys.scenesArr[manager.getInd(neighbors[j])].numRoles == 0) {
+                    if (board.gsys.scenesArr[manager.getInd(neighbors[j])].numRoles == 0) {
                         System.out.print("(no roles or wrapped)");
                     }
                 }
@@ -404,7 +605,7 @@ public class BoardLayersListener extends JFrame {
                 if (confirm.equals("y")) {
                     System.out.println("Pick a role to fill:");
                     int locind = manager.getInd(curPlayer.location);
-                    Scene curScene = gsys.scenesArr[locind];
+                    Scene curScene = board.gsys.scenesArr[locind];
                     Card curCard = curScene.curCard;
                     int numPartCard = curCard.numParts;
                     int numPartScene = curScene.numRoles;
@@ -449,7 +650,7 @@ public class BoardLayersListener extends JFrame {
             if (playerSelection == 'w') {
                 Part p = curPlayer.part;
                 int ind = manager.getInd(curPlayer.location);
-                Card card = gsys.scenesArr[ind].curCard;
+                Card card = board.gsys.scenesArr[ind].curCard;
                 int budget = card.budget;
                 int range = 6;
                 Random rn = new Random();
@@ -458,10 +659,10 @@ public class BoardLayersListener extends JFrame {
                 if (r >= budget) {
                     if (curPlayer.getLevel() == 2) {
                         curPlayer.setCredits(curPlayer.getCredits() + 2);
-                        gsys.scenesArr[ind].takes -= 1;
+                        board.gsys.scenesArr[ind].takes -= 1;
                     }
                     if (curPlayer.getLevel() == 1) {
-                        gsys.scenesArr[ind].takes -= 1;
+                        board.gsys.scenesArr[ind].takes -= 1;
                         curPlayer.setCredits(curPlayer.getCredits() + 1);
                         curPlayer.setMoney(curPlayer.getMoney() + 1);
                     }
@@ -470,24 +671,20 @@ public class BoardLayersListener extends JFrame {
                         curPlayer.setMoney(curPlayer.getMoney() + 1);
                     }
                 }
-                if (gsys.scenesArr[ind].takes == 0) {
-                    gsys.scenesArr[ind].wrap();
-                    for (int i = 0; i < gsys.scenesArr[ind].filledRoles.length; i++) {
-                        Gplayers[gsys.scenesArr[ind].filledRoles[i + 1]].role = "no";
-                        Gplayers[gsys.scenesArr[ind].filledRoles[i + 1]].setLevel(0);
-                        Gplayers[gsys.scenesArr[ind].filledRoles[i + 1]].setRehearseLvl(0);
-                        Gplayers[gsys.scenesArr[ind].filledRoles[i + 1]].part = null;
+                if (board.gsys.scenesArr[ind].takes == 0) {
+                    board.gsys.scenesArr[ind].wrap();
+                    for (int i = 0; i < board.gsys.scenesArr[ind].filledRoles.length; i++) {
+                        Gplayers[board.gsys.scenesArr[ind].filledRoles[i + 1]].role = "no";
+                        Gplayers[board.gsys.scenesArr[ind].filledRoles[i + 1]].setLevel(0);
+                        Gplayers[board.gsys.scenesArr[ind].filledRoles[i + 1]].setRehearseLvl(0);
+                        Gplayers[board.gsys.scenesArr[ind].filledRoles[i + 1]].part = null;
                     }
                 }
 
-            }
-            // code for successful selections
-            //if(playerSelection = )
-
-            turnCounter++;
-
+             */
         }
 
-
     }
+
+
 }
