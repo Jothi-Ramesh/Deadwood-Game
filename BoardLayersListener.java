@@ -308,7 +308,7 @@ public class BoardLayersListener extends JFrame {
                     manager.days--;
                 }
                 if(manager.days==0){
-                    //game over
+                    scoreing();
                 }
                 setPlayer();
 
