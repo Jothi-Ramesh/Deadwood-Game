@@ -13,6 +13,7 @@ public class Player {
     private int level = 0;
     private int[] tokenLoc;
     private String image;
+    private String path;
 
 
     Player(int startMon, int startCred, String nameS, int numS, int rankS){
@@ -38,7 +39,10 @@ public class Player {
     }
 
     public void setImage(String image) {
-        this.image = image;
+        this.image = path+image+".png";
+    }
+    public void setPath(String path){
+        this.path = path;
     }
 
     public int[] getTokenLoc() {

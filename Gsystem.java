@@ -13,6 +13,7 @@ public class Gsystem extends LocationManager {
     private static boolean gameEnded = false;
     public Scene[] scenesArr;
     public Card[] cardsArr;
+    public Scene[] scenesFin;
 
     // Create a System object corresponding to the amount of players in the game
     public Gsystem() throws ParserConfigurationException {
@@ -71,7 +72,7 @@ public class Gsystem extends LocationManager {
                 scenes[j] = new Scene(name, numParts, takes, neighbors, parts, xyzInScene, takesLoc);
             }
         }
-        String[] oNeighbors = {"Train station", "Ranch", "Secret Hideout"};
+        String[] oNeighbors = {"Train Station", "Ranch", "Secret Hideout"};
         String[] tNeighbors = {"Main Street", "Saloon", "Hotel"};
         int[] tArea = {991,248,194,201};
         int[] oArea = {9,459,208,209};
@@ -118,6 +119,7 @@ public class Gsystem extends LocationManager {
         }
         cardsArr = cards;
         scenesArr = scenes;
+        scenesFin = scenesArr;
         
     }
 

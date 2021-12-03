@@ -1,4 +1,6 @@
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class LocationManager {
 
@@ -18,10 +20,16 @@ public class LocationManager {
         for(int i =0; i < playerCount; i++){
             playerLocationList[i] = scenes[10];
         }
-        playerLocationList = new Scene[players];
         shoots = 10;
 
 
+    }
+    public void resetManager(Scene[] scenesDict){
+        scenes = scenesDict;
+        for(int i =0; i < playerCount; i++){
+            playerLocationList[i] = scenes[10];
+        }
+        shoots = 2;
     }
 
     public LocationManager() {
@@ -55,8 +63,80 @@ public class LocationManager {
         }
         return -1;
     }
-
     public void sceneWrap(Scene curScene){
+        boolean someoneOnCard = false;
+        int cardCount = 0;
+        int boardCount = 0;
+        for(int i = 0; i < curScene.numRoles; i++){
+            if(curScene.filledRoles[i] != 0){
+                Player p = listOfPlayers[curScene.filledRoles[i]-1];
+                if(p.role.equals("card")){
+                    cardCount++;
+                    someoneOnCard = true;
+                }
+                else{
+                    boardCount++;
+                }
+            }
+        }
+        Player[] onCard = new Player[cardCount];
+        Player[] onBoard = new Player[boardCount];
+        int boardInd = 0;
+        int cardInd = 0;
+        for(int g = 0; g < curScene.numRoles; g++){
+            if(curScene.filledRoles[g] != 0){
+                Player p = listOfPlayers[curScene.filledRoles[g]-1];
+                if(p.role.equals("board")){
+                    onBoard[boardInd] = p;
+                    boardInd++;
+                }
+                else{
+                    onCard[cardInd] = p;
+                    cardInd++;
+                }
+            }
+        }
+        int budget = curScene.curCard.budget;
+        if(someoneOnCard) {
+            int[] rolls = new int[budget];
+            for (int g = 0; g < budget; g++) {
+                rolls[g] = (int) (Math.random() * 6 + 1);
+            }
+            int rollInd = 0;
+            Arrays.sort(rolls);
+            Arrays.sort(onCard, (a, b) -> String.valueOf(a.getRank()).compareTo(String.valueOf(b.getRank())));
+            int ind = 0;
+            while (rollInd <= budget) {
+                onCard[ind].setMoney(onCard[ind].getMoney() + rolls[rollInd]);
+                onCard[ind].setRehearseLvl(0);
+                onCard[ind].role = "no";
+                onCard[ind].part = null;
+                ind++;
+                rollInd++;
+                if (ind >= onCard.length) {
+                    ind = 0;
+                }
+            }
+            for (int j = 0; j < onBoard.length; j++) {
+                onBoard[j].setMoney(onBoard[j].getMoney() + onBoard[j].getRank());
+                onBoard[j].setRehearseLvl(0);
+                onBoard[j].role = "no";
+                onBoard[j].part = null;
+            }
+        }
+        else {
+            for (int j = 0; j < onBoard.length; j++) {
+                onBoard[j].setRehearseLvl(0);
+                onBoard[j].role = "no";
+                onBoard[j].part = null;
+            }
+        }
+        shoots--;
+        System.out.println(shoots);
+        curScene.numRoles=0;
+    }
+
+    /*public void sceneWrap(Scene curScene){
 
         int onCard = 0;
         Player[] playersInScene = new Player[curScene.numRoles];
@@ -116,4 +196,6 @@ public class LocationManager {
         shoots--;
         curScene.numRoles = 0;
     }
+
+     */
 }

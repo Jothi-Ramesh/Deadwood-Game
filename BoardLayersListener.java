@@ -26,6 +26,8 @@ public class BoardLayersListener extends JFrame {
     public static boolean turnDone;
     public static int playerCount;
     public static int playerTurn;
+    public static Player[] Gplayers;
+    BoardLayersListener board;
 
     // JLabels
     JLabel boardlabel;
@@ -68,11 +70,10 @@ public class BoardLayersListener extends JFrame {
 
         // Set the title of the JFrame
         super("Deadwood");
+        Gsystem gsys = new Gsystem();
 
         // Set the exit option for the JFrame
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        gsys = new Gsystem();
-        manager = new LocationManager();
         // Create the JLayeredPane to hold the display, cards, dice and buttons
         bPane = getLayeredPane();
 
@@ -295,11 +296,10 @@ public class BoardLayersListener extends JFrame {
 
             if(e.getSource() == bEndTurn){
 
-                System.out.println("Turn shoudl have ended");
                 turnCounter++;
                 if (manager.shoots == 1){
                     try {
-                        gsys = new Gsystem();
+                        resetDay(board);
                     } catch (ParserConfigurationException parserConfigurationException) {
                         parserConfigurationException.printStackTrace();
                     }
@@ -318,6 +318,7 @@ public class BoardLayersListener extends JFrame {
                 int budget = curScene.curCard.budget;
                 int rLevel = curPlayer.getRehearseLvl();
                 int roll = (int) (Math.random() * 6 + 1);
+                curPlayer.setImage(String.valueOf(roll));
                 if (curPlayer.role.equals("card")) {
                     if (roll+rLevel >= budget) {
                         JLabel token = new JLabel();
@@ -360,7 +361,9 @@ public class BoardLayersListener extends JFrame {
                 disableButtons();
             }
             else if(e.getSource() == bUpgrade){
-                upgradeInfo();
+                if(curPlayer.location.equals("office")) {
+                    upgradeInfo();
+                }
             }
             else if (e.getSource() == bMove) {
 
@@ -521,7 +524,7 @@ public class BoardLayersListener extends JFrame {
                 playerMoved = true;
             }
             else if (e.getSource() == bmOffice) {
-                manager.movePlayer(p, "Office");
+                manager.movePlayer(p, "office");
                 hideButtons();
                 disableButtons();
                 playerMoved = true;
@@ -674,7 +677,7 @@ public class BoardLayersListener extends JFrame {
                 ranks[ranks.length - 1]);
         String[] options = {"",""};
         int choiceInt = Integer.parseInt(choiceInd);
-        if (upgradeOpts[choiceInt][0] < curMon) {
+        if (upgradeOpts[choiceInt][0] < curCred) {
             options[1] = "Credits";
         }
         else {
@@ -688,13 +691,13 @@ public class BoardLayersListener extends JFrame {
         }
 
         int result = JOptionPane.showOptionDialog(null, "Do you want to Use credits or cash?", "Upgrade choice", 0, JOptionPane.INFORMATION_MESSAGE, null, options, null);
-        if(result == 0){
-            curPlayer.setRank(choiceInt);
-            curPlayer.setMoney(curPlayer.getMoney()-upgradeOpts[choiceInt][0]);
+        if(result == 1){
+            curPlayer.setRank(choiceInt+2);
+            curPlayer.setMoney(curPlayer.getMoney()-upgradeOpts[choiceInt][1]);
         }
         if(result == 0){
-            curPlayer.setRank(choiceInt);
-            curPlayer.setCredits(curPlayer.getCredits()-upgradeOpts[choiceInt][1]);
+            curPlayer.setRank(choiceInt+2);
+            curPlayer.setCredits(curPlayer.getCredits()-upgradeOpts[choiceInt][0]);
         }
     }
     private void hideButtons() {
@@ -737,6 +740,18 @@ public class BoardLayersListener extends JFrame {
         }
     }
 
+    public static void resetDay(BoardLayersListener board) throws ParserConfigurationException {
+        board = new BoardLayersListener();
+        manager.resetManager(gsys.scenesFin);
+        board.setCards(gsys.cardsArr, manager.scenes);
+        board.setPlayerInfo(manager.listOfPlayers[0]);
+        int[] area = {991, 248, 45, 45};
+        for(int i = 0; i < manager.listOfPlayers.length; i++){
+            manager.listOfPlayers[i].setTokenLoc(area);
+        }
+        board.setPlayer();
+
+    }
 
 
     public static void main(String[] args) throws ParserConfigurationException {
@@ -751,34 +766,32 @@ public class BoardLayersListener extends JFrame {
         }
 
 
-        Player[] Gplayers = new Player[playerCount];
+        Gplayers = new Player[playerCount];
         // Choose the correct game format based on playercount
         int[] area = {991, 248, 45, 45};
         if (playerCount == 2) {
             Player pOne = new Player(0, 0, "name", 1, 1);
             Player pTwo = new Player(0, 0, "name", 2, 1);
-            pOne.setImage("Deadwood-game/images/dice/b1.png");
-            pTwo.setImage("Deadwood-game/images/dice/r1.png");
-            pOne.setTokenLoc(area);
-            pTwo.setTokenLoc(area);
+            pOne.setPath("Deadwood-game/images/dice/b");
+            pTwo.setPath("Deadwood-game/images/dice/r");
             Gplayers = new Player[]{pOne, pTwo};
         } else if (playerCount == 3) {
             Player pOne = new Player(0, 0, "name", 1, 1);
             Player pTwo = new Player(0, 0, "name", 2, 1);
             Player pThree = new Player(0, 0, "name", 3, 1);
-            pOne.setTokenLoc(area);
-            pTwo.setTokenLoc(area);
-            pThree.setTokenLoc(area);
+            pOne.setPath("Deadwood-game/images/dice/b");
+            pTwo.setPath("Deadwood-game/images/dice/r");
+            pThree.setPath("Deadwood-game/images/dice/c");
             Gplayers = new Player[]{pOne, pTwo, pThree};
         } else if (playerCount == 4) {
             Player pOne = new Player(0, 0, "name", 1, 1);
             Player pTwo = new Player(0, 0, "name", 2, 1);
             Player pThree = new Player(0, 0, "name", 3, 1);
             Player pFour = new Player(0, 0, "name", 4, 1);
-            pOne.setTokenLoc(area);
-            pTwo.setTokenLoc(area);
-            pThree.setTokenLoc(area);
-            pFour.setTokenLoc(area);
+            pOne.setPath("Deadwood-game/images/dice/b");
+            pTwo.setPath("Deadwood-game/images/dice/r");
+            pThree.setPath("Deadwood-game/images/dice/c");
+            pFour.setPath("Deadwood-game/images/dice/g");
             Gplayers = new Player[]{pOne, pTwo, pThree, pFour};
         } else if (playerCount == 5) {
             Player pOne = new Player(0, 2, "name", 1, 1);
@@ -786,11 +799,11 @@ public class BoardLayersListener extends JFrame {
             Player pThree = new Player(0, 2, "name", 3, 1);
             Player pFour = new Player(0, 2, "name", 4, 1);
             Player pFive = new Player(0, 2, "name", 5, 1);
-            pOne.setTokenLoc(area);
-            pTwo.setTokenLoc(area);
-            pThree.setTokenLoc(area);
-            pFour.setTokenLoc(area);
-            pFive.setTokenLoc(area);
+            pOne.setPath("Deadwood-game/images/dice/b");
+            pTwo.setPath("Deadwood-game/images/dice/r");
+            pThree.setPath("Deadwood-game/images/dice/c");
+            pFour.setPath("Deadwood-game/images/dice/g");
+            pFive.setPath("Deadwood-game/images/dice/o");
             Gplayers = new Player[]{pOne, pTwo, pThree, pFour, pFive};
         } else if (playerCount == 6) {
             Player pOne = new Player(0, 4, "name", 1, 1);
@@ -799,12 +812,12 @@ public class BoardLayersListener extends JFrame {
             Player pFour = new Player(0, 4, "name", 4, 1);
             Player pFive = new Player(0, 4, "name", 5, 1);
             Player pSix = new Player(0, 4, "name", 6, 1);
-            pOne.setTokenLoc(area);
-            pTwo.setTokenLoc(area);
-            pThree.setTokenLoc(area);
-            pFour.setTokenLoc(area);
-            pFive.setTokenLoc(area);
-            pSix.setTokenLoc(area);
+            pOne.setPath("Deadwood-game/images/dice/b");
+            pTwo.setPath("Deadwood-game/images/dice/r");
+            pThree.setPath("Deadwood-game/images/dice/c");
+            pFour.setPath("Deadwood-game/images/dice/g");
+            pFive.setPath("Deadwood-game/images/dice/o");
+            pSix.setPath("Deadwood-game/images/dice/p");
             Gplayers = new Player[]{pOne, pTwo, pThree, pFour, pFive, pSix};
         } else if (playerCount == 7) {
             Player pOne = new Player(0, 0, "name", 1, 2);
@@ -814,13 +827,13 @@ public class BoardLayersListener extends JFrame {
             Player pFive = new Player(0, 0, "name", 5, 2);
             Player pSix = new Player(0, 0, "name", 6, 2);
             Player pSeven = new Player(0, 0, "name", 7, 2);
-            pOne.setTokenLoc(area);
-            pTwo.setTokenLoc(area);
-            pThree.setTokenLoc(area);
-            pFour.setTokenLoc(area);
-            pFive.setTokenLoc(area);
-            pSix.setTokenLoc(area);
-            pSeven.setTokenLoc(area);
+            pOne.setPath("Deadwood-game/images/dice/b");
+            pTwo.setPath("Deadwood-game/images/dice/r");
+            pThree.setPath("Deadwood-game/images/dice/c");
+            pFour.setPath("Deadwood-game/images/dice/g");
+            pFive.setPath("Deadwood-game/images/dice/o");
+            pSix.setPath("Deadwood-game/images/dice/p");
+            pSeven.setPath("Deadwood-game/images/dice/v");
             Gplayers = new Player[]{pOne, pTwo, pThree, pFour, pFive, pSix, pSeven};
         } else {
             Player pOne = new Player(0, 0, "name", 1, 2);
@@ -831,14 +844,14 @@ public class BoardLayersListener extends JFrame {
             Player pSix = new Player(0, 0, "name", 6, 2);
             Player pSeven = new Player(0, 0, "name", 7, 2);
             Player pEight = new Player(0, 0, "name", 8, 2);
-            pOne.setTokenLoc(area);
-            pTwo.setTokenLoc(area);
-            pThree.setTokenLoc(area);
-            pFour.setTokenLoc(area);
-            pFive.setTokenLoc(area);
-            pSix.setTokenLoc(area);
-            pSeven.setTokenLoc(area);
-            pEight.setTokenLoc(area);
+            pOne.setPath("Deadwood-game/images/dice/b");
+            pTwo.setPath("Deadwood-game/images/dice/r");
+            pThree.setPath("Deadwood-game/images/dice/c");
+            pFour.setPath("Deadwood-game/images/dice/g");
+            pFive.setPath("Deadwood-game/images/dice/o");
+            pSix.setPath("Deadwood-game/images/dice/p");
+            pSeven.setPath("Deadwood-game/images/dice/v");
+            pEight.setPath("Deadwood-game/images/dice/w");
             Gplayers = new Player[]{pOne, pTwo, pThree, pFour, pFive, pSix, pSeven, pEight};
         }
 
@@ -846,18 +859,17 @@ public class BoardLayersListener extends JFrame {
 
         for (int i = 0; i < playerCount; i++) {
             Gplayers[i].name = JOptionPane.showInputDialog(board, "What is this players name?");
+            Gplayers[i].setImage("1");
         }
-        manager = new LocationManager(playerCount, board.gsys.scenesArr, Gplayers);
-        manager.listOfPlayers = Gplayers;
         gsys = new Gsystem();
         boolean gameEnded = false;
-        board.setCards(gsys.cardsArr, manager.scenes);
-        board.setPlayerInfo(manager.listOfPlayers[0]);
-        board.setPlayer();
+        manager = new LocationManager(playerCount, gsys.scenesArr, Gplayers);
+        resetDay(board);
 
         while (!gameEnded) {
 
         }
+        //end game
 
     }
 
