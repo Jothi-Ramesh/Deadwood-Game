@@ -44,10 +44,12 @@ public class Gsystem extends LocationManager {
                 int takes = Integer.parseInt(((Element) takeList.item(0)).getAttribute("number"));
                 int[][] takesLoc = new int[takes][4];
                 for (int g = 0; g < takes; g ++){
-                    takesLoc[g][0] = Integer.parseInt(scene.getElementsByTagName("area").item(0).getAttributes().item(2).getTextContent());
-                    takesLoc[g][1] = Integer.parseInt(scene.getElementsByTagName("area").item(0).getAttributes().item(3).getTextContent());
-                    takesLoc[g][2] = Integer.parseInt(scene.getElementsByTagName("area").item(0).getAttributes().item(0).getTextContent());
-                    takesLoc[g][3] = Integer.parseInt(scene.getElementsByTagName("area").item(0).getAttributes().item(1).getTextContent());
+                    Node take = takeList.item(g);
+                    Element takeE = (Element) take;
+                    takesLoc[g][0] = Integer.parseInt(takeE.getElementsByTagName("area").item(0).getAttributes().item(2).getTextContent());
+                    takesLoc[g][1] = Integer.parseInt(takeE.getElementsByTagName("area").item(0).getAttributes().item(3).getTextContent());
+                    takesLoc[g][2] = Integer.parseInt(takeE.getElementsByTagName("area").item(0).getAttributes().item(0).getTextContent());
+                    takesLoc[g][3] = Integer.parseInt(takeE.getElementsByTagName("area").item(0).getAttributes().item(1).getTextContent());
                 }
                 NodeList partList = ((Element) curScene).getElementsByTagName("part");
                 int numParts = partList.getLength();
@@ -89,6 +91,7 @@ public class Gsystem extends LocationManager {
 
                 String cardName = card.getAttribute("name");
                 int cardBudget = Integer.parseInt(card.getAttribute("budget"));
+                String img = "Deadwood-game/images/cards/"+card.getAttribute("img");
                 NodeList sceneList = ((Element) curCard).getElementsByTagName("scene");
                 int cardNum = Integer.parseInt(((Element) sceneList.item(0)).getAttribute("number"));
                 String line = sceneList.item(0).getTextContent();
@@ -99,6 +102,7 @@ public class Gsystem extends LocationManager {
                     Node partN = partList.item(k);
                     Element partE = (Element) partN;
                     String pName = partE.getAttribute("name");
+
                     int pLevel = Integer.parseInt(partE.getAttribute("level"));
                     String pLine = partE.getElementsByTagName("line").item(0).getTextContent();
                     int[] xyzIn = new int[4];
@@ -108,25 +112,16 @@ public class Gsystem extends LocationManager {
                     xyzIn[3] = Integer.parseInt(partE.getElementsByTagName("area").item(0).getAttributes().item(1).getTextContent());
                     parts[k] = new Part(pName, pLine, pLevel, xyzIn, 1);
                 }
-                cards[i] = new Card(cardName, line, cardNum, cardBudget, numParts, parts);
+                cards[i] = new Card(cardName, line, cardNum, cardBudget, numParts, parts, img);
             }
 
         }
         cardsArr = cards;
-        setCards(cards, scenes);
         scenesArr = scenes;
         
     }
 
-    public void setCards(Card[] cardsArr, Scene[] scenesArr) {
-        int range = cardsArr.length;
-        Random rn = new Random();
-        int n = rn.nextInt(40);
-        for(int j = 0; j < scenesArr.length; j++){
-            n = rn.nextInt(40);
-            scenesArr[j].addCard(cardsArr[n]);
-        }
-    }
+
     public Document getDocFromFile(String filename)
             throws ParserConfigurationException {
         DocumentBuilderFactory docBuildFac = DocumentBuilderFactory.newInstance();

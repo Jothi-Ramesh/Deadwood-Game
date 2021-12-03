@@ -1,3 +1,5 @@
+import javax.swing.*;
+
 public class Card {
     String name;
     String desc;
@@ -5,8 +7,12 @@ public class Card {
     int budget;
     int numParts;
     Part[] parts;
+    String img;
+    String tempImg;
+    boolean revealed;
+    int[] location;
 
-    public Card(String nameN, String descN, int scnNumN, int budgetN, int numPartsN, Part partsIn[]) {
+    public Card(String nameN, String descN, int scnNumN, int budgetN, int numPartsN, Part partsIn[], String imgIn) {
         name = nameN;
         desc = descN;
         scnNum = scnNumN;
@@ -16,6 +22,9 @@ public class Card {
         for(int i = 0; i < numParts; i++){
             parts[i] = partsIn[i];
         }
+        img = imgIn;
+        revealed = false;
+        tempImg = "Deadwood-game/images/CardBack-small.jpg";
     }
 
     public String getName() {
@@ -41,6 +50,16 @@ public class Card {
     public String getDesc() {
         return desc;
     }
+
+    public void reveal(){
+        revealed = true;
+        ImageIcon cIcon = new ImageIcon(img);
+    }
+
+    public void setLocation(int[] location) {
+        this.location = location;
+    }
+
 }
 
 

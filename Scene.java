@@ -8,6 +8,7 @@ public class Scene {
     Part[] parts;
     Card curCard;
     int takes;
+    int takesTot;
     int[] area;
     int[][] takeLoc;
 
@@ -15,7 +16,8 @@ public class Scene {
         name = nameIn;
         numRoles = numRolesIn;
         numRolesInt = numRoles;
-        takes = takesIn;
+        takes = 0;
+        takesTot = takesIn;
         neighbors = neighborsIn;
         parts = partsIn;
         filledRoles = new int [numRoles];
@@ -48,7 +50,7 @@ public class Scene {
 
     public void fillRole(int roleInd, int playerNum){
         numRoles--;
-        filledRoles[roleInd] = 1;
+        filledRoles[roleInd] = playerNum;
         if(roleInd >numRolesInt){
             curCard.parts[roleInd-numRolesInt].taken = true;
         }

@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 public class LocationManager {
 
     protected int playerCount;
@@ -57,33 +59,59 @@ public class LocationManager {
     public void sceneWrap(Scene curScene){
 
         int onCard = 0;
-        Player[] playersInScene = new Player[curScene.filledRoles.length];
-        for(int n = 0; n<curScene.filledRoles.length; n++){
-            playersInScene[n] = null;
-        }
+        Player[] playersInScene = new Player[curScene.numRoles];
         int ind = 0;
         for(int i = 0; i <curScene.filledRoles.length; i++){
             if(curScene.filledRoles[i] != 0){
-                Player p = listOfPlayers[curScene.filledRoles[i]-1];
+                int ind2 = curScene.filledRoles[i];
+                Player p = listOfPlayers[ind2-1];
                 playersInScene[ind] = p;
-                if(p.part.onCard == 1){
+                if(p.role.equals("card")){
                     onCard = 1;
                 }
+                ind++;
             }
         }
-        if(onCard == 1){
-            for(int j = 0; j < playersInScene.length; j++){
-                playersInScene[j].role="no";
-                playersInScene[j].part=null;
-                //add awarding here tomorrow
+        if(onCard == 1) {
+            for (int j = 0; j < playersInScene.length; j++) {
+                int[] rolls = new int[curScene.curCard.budget];
+                for (int g = 0; g < ind; g++) {
+                    rolls[g] = (int) (Math.random() * 6 + 1);
+                }
+                int rollInd = 0;
+                Arrays.sort(rolls);
+                int[][] sortedPlayers = new int[ind][2];
+                for (int i = 0; i < ind; i++) {
+                    sortedPlayers[i][0] = playersInScene[i].getRank();
+                    sortedPlayers[i][1] = playersInScene[i].getNum();
+                }
+                Arrays.sort(sortedPlayers);
+                if (playersInScene[j] != null) {
+                    playersInScene[j].role = "no";
+                    playersInScene[j].part = null;
+                    for (int h = 0; h < rolls.length; h++) {
+                        if (rollInd == ind) {
+                            rollInd = 0;
+                        }
+                        if (playersInScene[rollInd].role.equals("card")) {
+                            playersInScene[rollInd].setMoney(playersInScene[rollInd].getMoney() + rolls[h]);
+                            rollInd++;
+                        }
+                    }
+                }
             }
         }
         else{
             for(int j = 0; j < playersInScene.length; j++){
-                playersInScene[j].role="no";
-                playersInScene[j].part=null;
-                //add awarding here tomorrow
+                if(playersInScene[j] != null) {
+                    playersInScene[j].role = "no";
+                    playersInScene[j].part = null;
+                    //add awarding here tomorrow
+                }
             }
+        }
+        for(int n = 0; n<curScene.filledRoles.length; n++){
+            playersInScene[n] = null;
         }
         shoots--;
         curScene.numRoles = 0;
