@@ -581,7 +581,6 @@ public class Gsystem extends LocationManager {
                     }
                 }
                 if(gsys.scenesArr[ind].takes == 0){
-                    gsys.scenesArr[ind].wrap();
                     for(int i =0; i < gsys.scenesArr[ind].filledRoles.length; i++){
                         Gplayers[gsys.scenesArr[ind].filledRoles[i+1]].role="no";
                         Gplayers[gsys.scenesArr[ind].filledRoles[i+1]].setLevel(0);

@@ -10,13 +10,11 @@
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.ImageIcon;
-import javax.imageio.ImageIO;
 import java.awt.event.*;
+import java.util.Arrays;
 import java.util.Random;
-import java.util.Scanner;
 import javax.swing.JOptionPane;
 import javax.xml.parsers.ParserConfigurationException;
-import java.util.*;
 
 public class BoardLayersListener extends JFrame {
     public static Gsystem gsys;
@@ -27,7 +25,8 @@ public class BoardLayersListener extends JFrame {
     public static int playerCount;
     public static int playerTurn;
     public static Player[] Gplayers;
-    BoardLayersListener board;
+    public static BoardLayersListener board;
+    public static boolean gameEnded;
 
     // JLabels
     JLabel boardlabel;
@@ -40,6 +39,7 @@ public class BoardLayersListener extends JFrame {
     JLabel pLocL;
     JLabel pRankL;
     JLabel pReherL;
+    JLabel token;
 
     //JButtons
     JButton bAct;
@@ -66,10 +66,12 @@ public class BoardLayersListener extends JFrame {
     // Constructor
 
     public BoardLayersListener() throws ParserConfigurationException {
-
-
-        // Set the title of the JFrame
         super("Deadwood");
+    }
+
+    public void buildBoard() throws ParserConfigurationException {
+        // Set the title of the JFrame
+
         Gsystem gsys = new Gsystem();
 
         // Set the exit option for the JFrame
@@ -102,8 +104,8 @@ public class BoardLayersListener extends JFrame {
         playerlabel.setVisible(false);
         bPane.add(playerlabel, new Integer(3));
 
-        pLabel= new JLabel("PLAYER");
-        pLabel.setBounds(icon.getIconWidth()+40, 200,100, 20);
+        pLabel = new JLabel("PLAYER");
+        pLabel.setBounds(icon.getIconWidth() + 40, 200, 100, 20);
         bPane.add(pLabel, new Integer(2));
 
         pNameL = new JLabel("Name");
@@ -299,7 +301,7 @@ public class BoardLayersListener extends JFrame {
                 turnCounter++;
                 if (manager.shoots == 1){
                     try {
-                        resetDay(board);
+                        resetDay();
                     } catch (ParserConfigurationException parserConfigurationException) {
                         parserConfigurationException.printStackTrace();
                     }
@@ -543,6 +545,9 @@ public class BoardLayersListener extends JFrame {
                     case JOptionPane.CLOSED_OPTION:
                         moreOpts = false;
                         break;
+                    case JOptionPane.CANCEL_OPTION:
+                        moreOpts = false;
+                        break;
                 }
                 if(moreOpts){
                     moreOptions(manager.scenes[manager.getInd(curPlayer.getLocation())]);
@@ -598,60 +603,57 @@ public class BoardLayersListener extends JFrame {
         cardlabel.setBounds(card.location[0], card.location[1], cIcon.getIconWidth(), cIcon.getIconHeight());
         bPane.add(cardlabel, new Integer(2));
     }
-    private void moreOptions(Scene curScene){
+    private void moreOptions(Scene curScene) {
         int numPartScene = curScene.numRolesInt;
         int numPartCard = curScene.curCard.numParts;
-        String[] parts = new String[numPartCard+numPartScene];
-        Part[] trueParts = new Part[numPartCard+numPartScene];
-        int ind = 0;
+        String[] parts = new String[numPartCard + numPartScene];
+        Part[] trueParts = new Part[numPartCard + numPartScene];
+        int ind1 = 0;
+        int ind2 = 0;
         int i = 0;
         int k = 0;
         for (i = 0; i < numPartScene; i++) {
-            trueParts[ind] = curScene.parts[i];
+            trueParts[ind1] = curScene.parts[i];
             if (!curScene.parts[i].taken && curScene.parts[i].level <= curPlayer.getRank()) {
-                parts[ind] = curScene.parts[i].name;
-                ind++;
+                parts[ind2] = curScene.parts[i].name;
+                ind2++;
             }
-            else{
-                parts[ind] = "Invalid: "+curScene.parts[i].name;
-                ind++;
-            }
+            ind1++;
         }
         for (k = 0; k < numPartCard; k++) {
+            trueParts[ind1] = curScene.curCard.parts[k];
             if (!curScene.curCard.parts[k].taken && curScene.curCard.parts[k].level <= curPlayer.getRank()) {
-                trueParts[ind] = curScene.curCard.parts[k];
-                parts[ind] = curScene.curCard.parts[k].name;
-                ind++;
+                parts[ind2] = curScene.curCard.parts[k].name;
+                ind2++;
+
             }
-            else {
-                parts[ind] = "Invalid: " + curScene.curCard.parts[k].name;
-                ind++;
-            }
+            ind1++;
         }
         String choiceInd = (String) JOptionPane.showInputDialog(
                 null,
-                "What role would you like? Invalid roles are prohibited?",
+                "What role would you like?",
                 "Choose Role",
                 JOptionPane.QUESTION_MESSAGE,
                 null,
                 parts,
-                parts[parts.length-1]);
+                parts[parts.length - 1]);
         int indCheck = 0;
-        for(int h = 0; h<parts.length; h++){
-            if(parts[h].equals(choiceInd)){
-                indCheck = h;
+        if (choiceInd != null) {
+            for (int h = 0; h < parts.length; h++) {
+                if (trueParts[h].name.equals(choiceInd)) {
+                    indCheck = h;
+                }
             }
+            curScene.fillRole(indCheck, curPlayer.num);
+            String opts;
+            if (indCheck > numPartScene) {
+                opts = "card";
+            } else {
+                opts = "board";
+            }
+            curPlayer.fillRole(trueParts[indCheck], opts);
+            curPlayer.setTokenLoc(trueParts[indCheck].area);
         }
-        curScene.fillRole(indCheck, curPlayer.num);
-        String opts;
-        if(indCheck > numPartScene){
-            opts = "card";
-        }
-        else{
-            opts = "board";
-        }
-        curPlayer.fillRole(trueParts[indCheck], opts);
-        curPlayer.setTokenLoc(trueParts[indCheck].area);
     }
 
     private void upgradeInfo() {
@@ -740,23 +742,44 @@ public class BoardLayersListener extends JFrame {
         }
     }
 
-    public static void resetDay(BoardLayersListener board) throws ParserConfigurationException {
-        board = new BoardLayersListener();
+    public static void resetDay() throws ParserConfigurationException {
+        board.bPane.removeAll();
+        board.bPane.repaint();
+        board.buildBoard();
         manager.resetManager(gsys.scenesFin);
         board.setCards(gsys.cardsArr, manager.scenes);
         board.setPlayerInfo(manager.listOfPlayers[0]);
         int[] area = {991, 248, 45, 45};
         for(int i = 0; i < manager.listOfPlayers.length; i++){
             manager.listOfPlayers[i].setTokenLoc(area);
+            manager.listOfPlayers[i].role="no";
+            manager.listOfPlayers[i].part = null;
+            manager.listOfPlayers[i].location="trailer";
+            manager.listOfPlayers[i].setRehearseLvl(0);
         }
         board.setPlayer();
 
     }
-
-
+    private void scoreing(){
+        Player[] players = manager.listOfPlayers;
+        int[] scores = new int[players.length];
+        for(int i = 0; i < players.length; i ++){
+            scores[i] = players[i].getMoney()+players[i].getCredits()+(5*players[i].getRank());
+        }
+        Player winner = players[0];
+        int winningScore = scores[0];
+        for(int j = 0; j < scores.length; j++){
+            if(scores[j]>winningScore){
+                winner = players[j];
+                winningScore = scores[j];
+            }
+        }
+        JOptionPane.showMessageDialog(board, "Winner is "+winner.name+" with a final score of "+winningScore+"!");
+        gameEnded = true;
+    }
     public static void main(String[] args) throws ParserConfigurationException {
 
-        BoardLayersListener board = new BoardLayersListener();
+        board = new BoardLayersListener();
         board.setVisible(true);
 
         // Take input from the user about number of players
@@ -863,8 +886,9 @@ public class BoardLayersListener extends JFrame {
         }
         gsys = new Gsystem();
         boolean gameEnded = false;
+        board.buildBoard();
         manager = new LocationManager(playerCount, gsys.scenesArr, Gplayers);
-        resetDay(board);
+        resetDay();
 
         while (!gameEnded) {
 

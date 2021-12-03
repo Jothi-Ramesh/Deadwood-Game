@@ -54,6 +54,9 @@ public class Scene {
         if(roleInd >numRolesInt){
             curCard.parts[roleInd-numRolesInt].taken = true;
         }
+        else{
+            parts[roleInd].taken = true;
+        }
     }
     public void decreaseShot(){}
 
@@ -66,10 +69,9 @@ public class Scene {
     }
 
     public void addCard(Card card){
-        int[] tempRoles = filledRoles;
-        int[] newRoles= new int[numRoles+ card.numParts];
-        for(int i =0; i< tempRoles.length; i++){
-            newRoles[i] = filledRoles[i];
+        int[] newRoles= new int[numRolesInt+ card.numParts];
+        for(int i =0; i< newRoles.length; i++){
+            newRoles[i] = 0;
         }
         filledRoles = newRoles;
         numRoles = newRoles.length;
@@ -80,8 +82,5 @@ public class Scene {
             card.parts[j].setArea(curArea);
         }
         curCard = card;
-    }
-    public void wrap(){
-
     }
 }
